@@ -1,0 +1,53 @@
+<!doctype html>
+
+<!--
+
+  Use Fetch API to load JSON file.
+
+  One JSON file will hold the current (or starting) game state.
+  Other JSON files will support the game data elements.
+
+  https://stackoverflow.com/questions/7346563/loading-local-json-file
+
+-->
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>EMPYREAN</title>
+  <meta name="author" content="Eric Wilke">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="text/javascript" src="data/map1.json"></script>
+  <script type="text/javascript" src="js/loadassets.js"></script>
+  <script type="text/javascript" src="js/player.js"></script>
+</head>
+
+<body>
+
+  <center>
+    <div id="start">
+      <button id="startButton" onclick='init();'>
+        Enter the Realm
+      </button>
+    </div>
+  </center>
+  <table>
+    <tr>
+      <td>
+        <canvas id="main_screen" width="0" heigh="0"></canvas>
+      </td>
+      <td style="vertical-align: top">
+        <div id="console">
+          a = left<br/>
+          d = right<br/>
+          w = up<br/>
+          s = down<br/>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <script src="js/scripts.js"></script>
+</body>
+</html>

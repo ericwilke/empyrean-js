@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+}
+
+canvas {
+  border: 1px solid black;
+  background: black;
+}
+
+.container span {
+  display: table-cell;
+  vertical-align: top;
+  line-height: normal;
+}
