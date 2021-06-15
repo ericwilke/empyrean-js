@@ -1,16 +1,5 @@
 <!doctype html>
 
-<!--
-
-  Use Fetch API to load JSON file.
-
-  One JSON file will hold the current (or starting) game state.
-  Other JSON files will support the game data elements.
-
-  https://stackoverflow.com/questions/7346563/loading-local-json-file
-
--->
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -19,20 +8,21 @@
   <meta name="author" content="Eric Wilke">
 
   <link rel="stylesheet" href="css/styles.css">
-  <script type="text/javascript" src="data/map1.json"></script>
   <script type="text/javascript" src="js/loadassets.js"></script>
   <script type="text/javascript" src="js/player.js"></script>
+  <script type="text/javascript" src="js/lineofsight.js"></script>
 </head>
 
-<body>
-
+<body onload="init()">
+  <!--
   <center>
     <div id="start">
       <button id="startButton" onclick='init();'>
-        Enter the Realm
+        Start Game
       </button>
     </div>
   </center>
+-->
   <table>
     <tr>
       <td>
@@ -48,6 +38,6 @@
       </td>
     </tr>
   </table>
-  <script src="js/scripts.js"></script>
+  <script src="js/gamescript.js"></script>
 </body>
 </html>

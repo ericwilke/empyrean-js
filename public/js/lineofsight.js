@@ -10,7 +10,6 @@ function getLine (x1, y1, x2, y2) {
   let ddy, ddx;        // compulsory variables: the double values of dy and dx
   let dx = x2 - x1;
   let dy = y2 - y1;
-
   points.push({x: x1, y: y1});
   // NB the last point can't be here, because of its previous point (which has to be verified)
   if (dy < 0) {
@@ -68,10 +67,63 @@ function getLine (x1, y1, x2, y2) {
           points.push({x: x, y: y-ystep});
         }
       }
-
       points.push({x: x, y: y});
       errorprev = error;
     }
   }
   return points;
+}
+
+function isPointVisible(x1, y1, x2, y2) {
+  // Determine if the line of sight it blocked. Return true if not blocked
+  // otherwise return false.
+
+  // Need to have equations for vertical line, horizontal line, and the
+  // Bresenham's line algorithm
+
+  // Handle vertical line
+  if (x1 - x2 == 0) {
+    let ystart = y1;
+    let yend = y2;
+    if (y2 < y1) {
+      ystart = y2;
+      yend = y1
+    }
+    for (let y=ystart; y<yend; y++) {
+      if ((y != y1) && (y != y2)) {
+        if (VISON_BLOCKING_TILES.includes(map[x1][y])) { // for now, 1 = mountains
+          return false;
+        }
+      }
+    }
+  }
+
+  // Handle horizontal line
+  if (y1 - y2 == 0) {
+    let xstart = x1;
+    let xend = x2;
+    if (x2 < x1) {
+      xstart = x2;
+      xend = x1
+    }
+    for (let x=xstart; x<xend; x++) {
+      if ((x != x1) && (x != x2)) {
+        if (VISON_BLOCKING_TILES.includes(map[x][y1])) { // for now, 1 = mountains
+          return false;
+        }
+      }
+    }
+  }
+
+  // Handle all other lines
+  let linePoints = getLine(x1, y1, x2, y2);
+  for (i=0; i<linePoints.length; i++) {
+    if (linePoints[i].x != x1 && linePoints[i].y != y1) {
+      if (VISON_BLOCKING_TILES.includes(map[linePoints[i].x][linePoints[i].y])) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }

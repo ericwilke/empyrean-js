@@ -1,7 +1,8 @@
 class Player {
   constructor(x,y) {
-    this.x = x;
-    this.y = y;
+    this.x = x
+    this.y = y
+    this.hp = 11 + Math.floor(Math.random()*6)
   }
 
   moveLeft(map) {
