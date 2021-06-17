@@ -4,7 +4,7 @@
 
 From the `terminal`, run the following command:
 
-    node empyrea.js
+    node empyrean.js
 
 Then go to the browser and enter the following URL:
 

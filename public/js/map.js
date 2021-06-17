@@ -1,30 +1,35 @@
 class Map {
-  constructor(src) {
-    // Read in the JSON data from the src and parce into the map elements
-    (fetch(src))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("HTTP error " + response.status)
-      }
-      return response.json()
-    })
-    .then(json => {
-      mapsrc = json
-    })
-    .catch(function() {
-      consol.log()
-    })
-    this.width = mapsrc.width
-    this.height = mapsrc.height
-    this.tiles = Create2DArray(this.width, this.height)
-    this.tiles = mapsrc.tiles
-    console.log(this.tiles);
+
+  constructor(name) {
+    this.name = name
+    this.url = "/data/" + name + ".json"
   }
 
-  function Create2DArray(columns, rows) {
-    let arr = new Array(rows);
-    for (let i=0;i<rows;i++) {
-       arr[i] = new Array(columns);
+  async loadMap() {
+    const response = await fetch(this.url)
+    const data = await response.json()
+    this.width = data.mapwidth
+    this.height = data.mapheight
+
+    this.playerStartX = data.playerStartX
+    this.playerStartY = data.playerStartY
+
+    this.tiles = new Array(this.height)
+    for(let i=0; i<this.height; i++) {
+      this.tiles[i] = new Array(this.width)
     }
-    return arr;
+
+    this.tiles = data.tiles
+    this.portals = data.portals
+
+    console.log("successfully loaded map data: " + this.name)
   }
+
+  async saveMap() {
+
+  }
+
+  async swapMap() {
+
+  }
+}

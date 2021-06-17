@@ -91,7 +91,7 @@ function isPointVisible(x1, y1, x2, y2) {
     }
     for (let y=ystart; y<yend; y++) {
       if ((y != y1) && (y != y2)) {
-        if (VISON_BLOCKING_TILES.includes(map[x1][y])) { // for now, 1 = mountains
+        if (VISON_BLOCKING_TILES.includes(ACTIVE_MAP.tiles[y][x1])) { // for now, 1 = mountains
           return false;
         }
       }
@@ -108,7 +108,7 @@ function isPointVisible(x1, y1, x2, y2) {
     }
     for (let x=xstart; x<xend; x++) {
       if ((x != x1) && (x != x2)) {
-        if (VISON_BLOCKING_TILES.includes(map[x][y1])) { // for now, 1 = mountains
+        if (VISON_BLOCKING_TILES.includes(ACTIVE_MAP.tiles[y1][x])) { // for now, 1 = mountains
           return false;
         }
       }
@@ -119,7 +119,7 @@ function isPointVisible(x1, y1, x2, y2) {
   let linePoints = getLine(x1, y1, x2, y2);
   for (i=0; i<linePoints.length; i++) {
     if (linePoints[i].x != x1 && linePoints[i].y != y1) {
-      if (VISON_BLOCKING_TILES.includes(map[linePoints[i].x][linePoints[i].y])) {
+      if (VISON_BLOCKING_TILES.includes(ACTIVE_MAP.tiles[linePoints[i].y][linePoints[i].x])) {
         return false;
       }
     }

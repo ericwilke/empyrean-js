@@ -4,7 +4,7 @@
 //
 // A Javascript browser game in the vein of Ultima.
 
-console.log("running scripts");
+console.log("running game");
 
 // Set up canvas DOM element.
 // Tiles are 90x90 px.
@@ -16,6 +16,7 @@ canvas.height = 810;
 
 let MAP_TILE_OFFSET = 4; //This is the number of tiles to the left, right, above, and below of the player
 let KEY_PRESS = null;
+let ACTIVE_MAP
 let SPLASH_SCREEN = true;
 let MAP_WIDTH = 100;
 let MAP_HEIGHT = 100;
@@ -106,7 +107,7 @@ function draw() {
     for(y = player.y - MAP_TILE_OFFSET; y < player.y + MAP_TILE_OFFSET + 1; y++) {
       if(x >= 0 && y >=0 && x<MAP_WIDTH && y<MAP_HEIGHT && (isPointVisible(x,y,player.x,player.y)) ) {
         ctx.drawImage(tile_grass, screen_x*90, screen_y*90);
-        switch(map[x][y]) {
+        switch(ACTIVE_MAP.tiles[y][x]) {
           case "grass":
             ctx.drawImage(tile_grass, screen_x*90, screen_y*90);
             break;
@@ -233,19 +234,19 @@ function gameLoop() {
   }
   switch(KEY_PRESS) {
     case "a":
-      player.moveLeft(map);
+      player.moveLeft();
       break;
 
     case "d":
-      player.moveRight(map);
+      player.moveRight();
       break;
 
     case "w":
-      player.moveUp(map);
+      player.moveUp();
       break;
 
     case "s":
-      player.moveDown(map);
+      player.moveDown();
       break;
   }
   draw();
@@ -258,23 +259,17 @@ async function readJson(url) {
 }
 
 async function init() {
-  // load test map
-  const mapdata = await readJson("/data/map1.json")
-  console.log(mapdata.mapname)
-  //console.log(mapdata.tiles)
-  MAP_WIDTH = mapdata.mapwidth
-  MAP_HEIGHT = mapdata.mapheight
-  console.log("MAP_WIDTH: " + MAP_WIDTH);
-  console.log("MAP_HEIGHT: " + MAP_HEIGHT);
-  map = Create2DArray(MAP_HEIGHT, MAP_WIDTH)
-  for(col=0; col < mapdata.tiles.length; col++){
-    for(row=0; row < mapdata.tiles[col].length; row++){
-      map[row][col] = mapdata.tiles[col][row]
-      console.log("map tile at (" + row + ", " + col + "): " + map[row][col])
-    }
-  }
+
+  ACTIVE_MAP = new Map("map1")
+  ACTIVE_MAP.loadMap().then(res => {
+    player.x = ACTIVE_MAP.playerStartX
+    player.y = ACTIVE_MAP.playerStartY
+    MAP_WIDTH = ACTIVE_MAP.width
+    MAP_HEIGHT = ACTIVE_MAP.height
+  })
+
 
   document.onkeypress = keyPress;
-  player = new Player(mapdata.player_start_x,mapdata.player_start_y);
+  player = new Player(3,3);
   splashScreen();
 }
