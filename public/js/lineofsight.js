@@ -91,7 +91,7 @@ function isPointVisible(x1, y1, x2, y2) {
     }
     for (let y=ystart; y<yend; y++) {
       if ((y != y1) && (y != y2)) {
-        if (VISON_BLOCKING_TILES.includes(ACTIVE_MAP.tiles[y][x1])) { // for now, 1 = mountains
+        if (VISON_BLOCKING_TILES.includes(ACTIVE_MAP.tiles[y][x1])) {
           return false;
         }
       }

@@ -1,22 +1,26 @@
 class Player {
-  constructor(x,y) {
-    this.x = x
-    this.y = y
+  constructor() {
+    this.x
+    this.y
+    this.currentmap
     this.hp = 11 + Math.floor(Math.random()*6)
+  }
+
+  setPlayerMap(mapname) {
+    this.currentmap = mapname
   }
 
   checkForPortal(y,x) {
     let str = y+","+x
     //console.log("checking for portal at " + str)
     if(str in ACTIVE_MAP.portals) {
-      //console.log("PORTAL!!!!");
-      return true
+      return ACTIVE_MAP.portals[str]
     } else {
-      return false
+      return null
     }
   }
 
-  moveLeft() {
+  async moveLeft() {
     x = this.x - 1;
     if (x < 0) {
       x=0;
@@ -26,8 +30,17 @@ class Player {
       x=this.x;
       startMusic(blockedSound, false);
     }
-    if (this.checkForPortal(x,this.y)) {
-      console.log("Need to switch maps");
+    for (let index in ACTIVE_MAP.npcs) {
+      if (x == ACTIVE_MAP.npcs[index].x && PLAYER.y == ACTIVE_MAP.npcs[index].y) {
+        x = this.x
+      }
+    }
+    const portal = this.checkForPortal(x,this.y)
+    if (portal != null) {
+      console.log("TEST for LOAD: Need to switch maps");
+      PLAYER.currentmap = portal
+      ACTIVE_MAP.saveMap()
+      activateMap(portal)
     }
     else {
       this.x = x;
@@ -44,8 +57,16 @@ class Player {
       x=this.x;
       startMusic(blockedSound, false);
     }
-    if (this.checkForPortal(x,this.y)) {
-      console.log("Need to switch maps");
+    for (let index in ACTIVE_MAP.npcs) {
+      if (x == ACTIVE_MAP.npcs[index].x && PLAYER.y == ACTIVE_MAP.npcs[index].y) {
+        x = this.x
+      }
+    }
+    const portal = this.checkForPortal(x,this.y)
+    if (portal != null) {
+      //console.log("Need to switch maps");
+      ACTIVE_MAP.saveMap()
+      activateMap(portal)
     }
     else {
       this.x = x;
@@ -59,11 +80,20 @@ class Player {
     }
     let tile = ACTIVE_MAP.tiles[y][this.x];
     if (MOVEMENT_BLOCKING_TILES.includes(tile)) {
+      console.log("blocking tile: " + tile);
       y=this.y;
       startMusic(blockedSound, false);
     }
-    if (this.checkForPortal(this.x,y)) {
-      console.log("Need to switch maps");
+    for (let index in ACTIVE_MAP.npcs) {
+      if (PLAYER.x == ACTIVE_MAP.npcs[index].x && y == ACTIVE_MAP.npcs[index].y) {
+        y = this.y
+      }
+    }
+    const portal = this.checkForPortal(this.x,y)
+    if (portal != null) {
+      //console.log("Need to switch maps to " + portal);
+      ACTIVE_MAP.saveMap()
+      activateMap(portal)
     }
     else {
       this.y = y;
@@ -80,8 +110,16 @@ class Player {
       y=this.y;
       startMusic(blockedSound, false);
     }
-    if (this.checkForPortal(this.x,y)) {
+    for (let index in ACTIVE_MAP.npcs) {
+      if (PLAYER.x == ACTIVE_MAP.npcs[index].x && y == ACTIVE_MAP.npcs[index].y) {
+        y = this.y
+      }
+    }
+    const portal = this.checkForPortal(this.x,y)
+    if (portal != null) {
       console.log("Need to switch maps");
+      ACTIVE_MAP.saveMap()
+      activateMap(portal)
     }
     else {
       this.y = y;

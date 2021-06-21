@@ -1,0 +1,33 @@
+{
+  "name":"MAPNAME",
+  "mapwidth":40,
+  "mapheight":40,
+  "playerStartX":18,
+  "playerStartY":0,
+  "music":"village",
+  "portals":{"19,0":"britania"},
+  "npcs": {
+    "Lord Stark": {
+      "tile": "king",
+      "x": 15,
+      "y": 9,
+      "movement": "static",
+      "x_direction": 0,
+      "y_direction": 0,
+      "constrain_low_x": 0,
+      "constrain_high_x": 0,
+      "constrain_low_y": 0,
+      "constrain_high_y": 0,
+      "greeting": ["Hello.", "I hear there is danger on the roads.", "Take care in your quest.", "Evil forces are in play."],
+      "heal": "yes",
+      "buy_sell": "no",
+      "give_item": {},
+      "teach_spell": {"spell": "heal", "msg": "I will teach you the HEAL spell."}
+    }
+  },
+  "spawnfrequency":0,
+  "spawntypes":[],
+  "maxmonsters":0,
+  "monsters": [],
+  "tiles":[[]]
+}

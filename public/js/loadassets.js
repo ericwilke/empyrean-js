@@ -7,6 +7,9 @@ const epicAdventureMusic = new Audio('sound/epic-adventure.mp3');
 const dramaticAdventureMusic = new Audio('sound/dramatic-adventure.mp3');
 const mellowAdventureMusic = new Audio('sound/mellow-adventure.mp3');
 const epicThemeMusic = new Audio('sound/epic-theme.mp3');
+const medievalThemeMusic = new Audio('sound/medieval-music.mp3');
+const villageMusic = new Audio('sound/village.mp3');
+const dungeonMysticalMusic = new Audio('sound/dungeon-mystical.mp3');
 
 // Sound Effects
 const blockedSound = new Audio('sound/blocked.mp3');
@@ -29,15 +32,28 @@ const tile_runestone = new Image(); tile_runestone.src = 'img/runestone1.png';
 const tile_sign = new Image(); tile_sign.src = 'img/sign.png';
 const tile_stairs = new Image(); tile_stairs.src = 'img/stairs.png';
 const tile_wall_white_square = new Image(); tile_wall_white_square.src = 'img/stone-white-square.png';
+const tile_secret_wall_white_square = new Image(); tile_secret_wall_white_square.src = 'img/secret-stone-white-square.png';
 const tile_wall_white_rough = new Image(); tile_wall_white_rough.src = 'img/stone-white-rough.png';
 const tile_wall_brown_rough = new Image(); tile_wall_brown_rough.src = 'img/stone-brown.png';
+const tile_secret_wall_brown_rough = new Image(); tile_secret_wall_brown_rough.src = 'img/secret-stone-brown.png';
 const tile_wall_gray = new Image(); tile_wall_gray.src = 'img/wall-stone-gray.png';
 const tile_swamp = new Image(); tile_swamp.src = 'img/swamp.png';
 const tile_town = new Image(); tile_town.src = 'img/town.png';
 const tile_water_shallow = new Image(); tile_water_shallow.src = 'img/water-shallow.png';
 const tile_water_deep = new Image(); tile_water_deep.src = 'img/water-deep.png';
 const tile_wood = new Image(); tile_wood.src = 'img/wood.png';
+const tile_portal = new Image(); tile_portal.src = 'img/portal.png';
+const tile_counter_horizontal = new Image(); tile_counter_horizontal.src = 'img/counter-horizontal.png';
+const tile_counter_vertical = new Image(); tile_counter_vertical.src = 'img/counter-vertical.png';
 
 const tile_player = new Image(); tile_player.src = 'img/player.png';
+const tile_king = new Image(); tile_king.src = 'img/king.png';
 
 const tile_goblin = new Image(); tile_goblin.src = 'img/goblin.png';
+const tile_zombie = new Image(); tile_zombie.src = 'img/zombie.png';
+const tile_zombie_king = new Image(); tile_zombie_king.src = 'img/zombie-king.png';
+const tile_skeleton = new Image(); tile_skeleton.src = 'img/skeleton.png';
+const tile_skeleton_guard = new Image(); tile_skeleton_guard.src = 'img/skeleton-guard.png';
+const tile_scorpion = new Image(); tile_scorpion.src = 'img/scorpion.png';
+const tile_rat = new Image(); tile_rat.src = 'img/rat.png';
+const tile_mummy = new Image(); tile_mummy.src = 'img/mummy.png';

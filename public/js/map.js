@@ -2,34 +2,63 @@ class Map {
 
   constructor(name) {
     this.name = name
-    this.url = "/data/" + name + ".json"
   }
 
   async loadMap() {
-    const response = await fetch(this.url)
+    console.log("Attempting to load map: " + this.name)
+    const response = await fetch("/data/"+this.name+".json")
     const data = await response.json()
-    this.width = data.mapwidth
-    this.height = data.mapheight
+
+    this.mapwidth = data.mapwidth
+    this.mapheight = data.mapheight
 
     this.playerStartX = data.playerStartX
     this.playerStartY = data.playerStartY
+
+    this.music = data.music
+
+    this.npcs = data.npcs
+
+    this.portals = data.portals
+    this.lockedDoors = data.lockedDoors
+
+    this.spawnfrequency = data.spawnfrequency
+    this.spawntypes = data.spawntypes
+    this.maxmonsters = data.maxmonsters
+    this.monsters = data.monsters
 
     this.tiles = new Array(this.height)
     for(let i=0; i<this.height; i++) {
       this.tiles[i] = new Array(this.width)
     }
-
     this.tiles = data.tiles
-    this.portals = data.portals
 
-    console.log("successfully loaded map data: " + this.name)
+    console.log("[Map Class] successfully loaded map data: " + this.name)
   }
 
   async saveMap() {
-
+    this.playerStartX = PLAYER.x
+    this.playerStartY = PLAYER.y
+    const res = await fetch("/api/savemap", {
+      method: 'POST',
+      mode: 'same-origin',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(this)
+    })
+    console.log("[Map Class] saved map successfully")
   }
 
-  async swapMap() {
-
+/*
+sync swapMap(portal) {
+    console.log("new map = " + this.portals[portal])
+    await this.saveMap()
+    await loadMap(this.portals[portal])
+    console.log(this.name)
   }
+*/
 }
