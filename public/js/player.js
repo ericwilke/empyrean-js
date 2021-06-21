@@ -35,6 +35,11 @@ class Player {
         x = this.x
       }
     }
+    for (let index = 0; index < ACTIVE_MAP.monsters.length; index++) {
+      if (x == ACTIVE_MAP.monsters[index].x && PLAYER.y == ACTIVE_MAP.monsters[index].y) {
+        x = this.x
+      }
+    }
     const portal = this.checkForPortal(x,this.y)
     if (portal != null) {
       console.log("TEST for LOAD: Need to switch maps");
@@ -62,6 +67,11 @@ class Player {
         x = this.x
       }
     }
+    for (let index = 0; index < ACTIVE_MAP.monsters.length; index++) {
+      if (x == ACTIVE_MAP.monsters[index].x && PLAYER.y == ACTIVE_MAP.monsters[index].y) {
+        x = this.x
+      }
+    }
     const portal = this.checkForPortal(x,this.y)
     if (portal != null) {
       //console.log("Need to switch maps");
@@ -80,12 +90,17 @@ class Player {
     }
     let tile = ACTIVE_MAP.tiles[y][this.x];
     if (MOVEMENT_BLOCKING_TILES.includes(tile)) {
-      console.log("blocking tile: " + tile);
+      //console.log("blocking tile: " + tile);
       y=this.y;
       startMusic(blockedSound, false);
     }
     for (let index in ACTIVE_MAP.npcs) {
       if (PLAYER.x == ACTIVE_MAP.npcs[index].x && y == ACTIVE_MAP.npcs[index].y) {
+        y = this.y
+      }
+    }
+    for (let index = 0; index < ACTIVE_MAP.monsters.length; index++) {
+      if (PLAYER.x == ACTIVE_MAP.monsters[index].x && y == ACTIVE_MAP.monsters[index].y) {
         y = this.y
       }
     }
@@ -112,6 +127,11 @@ class Player {
     }
     for (let index in ACTIVE_MAP.npcs) {
       if (PLAYER.x == ACTIVE_MAP.npcs[index].x && y == ACTIVE_MAP.npcs[index].y) {
+        y = this.y
+      }
+    }
+    for (let index = 0; index < ACTIVE_MAP.monsters.length; index++) {
+      if (PLAYER.x == ACTIVE_MAP.monsters[index].x && y == ACTIVE_MAP.monsters[index].y) {
         y = this.y
       }
     }

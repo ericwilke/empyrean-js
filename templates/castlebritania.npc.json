@@ -19,7 +19,7 @@
     },
     "2": {
         "name": "Castle Guard",
-        "tile": "castleguard",
+        "tile": "castle guard",
         "x": 14,
         "y": 22,
         "movement": "static",
@@ -37,7 +37,7 @@
     },
     "3": {
         "name": "Castle Guard",
-        "tile": "castleguard",
+        "tile": "castle guard",
         "x": 16,
         "y": 22,
         "movement": "static",
@@ -55,7 +55,7 @@
     },
     "4": {
         "name": "Castle Guard",
-        "tile": "castleguard",
+        "tile": "castle guard",
         "x": 13,
         "y": 9,
         "movement": "static",
@@ -73,7 +73,7 @@
     },
     "5": {
         "name": "Castle Guard",
-        "tile": "castleguard",
+        "tile": "castle guard",
         "x": 17,
         "y": 9,
         "movement": "static",
@@ -91,7 +91,7 @@
     },
     "6": {
         "name": "Castle Guard",
-        "tile": "castleguard",
+        "tile": "castle guard",
         "x": 13,
         "y": 19,
         "movement": "pace-x",
@@ -109,7 +109,7 @@
     },
     "7": {
         "name": "Old Man",
-        "tile": "oldman",
+        "tile": "old man",
         "x": 4,
         "y": 6,
         "movement": "constrain",
@@ -127,7 +127,7 @@
     },
     "8": {
         "name": "Merchant",
-        "tile": "merchant",
+        "tile": "commoner3",
         "x": 22,
         "y": 9,
         "movement": "constrain",

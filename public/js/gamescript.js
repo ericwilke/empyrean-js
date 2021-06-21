@@ -2,7 +2,7 @@
 //
 // Author: Eric Wilke
 //
-// A Javascript browser game in the vein of Ultima.
+// A Javascript browser game in the vain of Ultima.
 
 console.log("=== START SCRIPT ===");
 
@@ -24,6 +24,8 @@ let MAP_WIDTH = 0;
 let MAP_HEIGHT = 0;
 let CURRENT_MUSIC = null;
 let CURRENT_THEME = null;
+let TALK = false
+let COMBAT = false
 let GAME_MAPS = []
 let MESSAGE = "Start your adventure!\nDanger awaits!";
 const THEMES = ["adventure (mellow)", "adventure (epic)", "adventure (dramtic)", "fantasy (epic)", "town", "village", "dungeon (mystical)", "tavern", "danger", "combat", "dungeon", "horror", "sewer"];
@@ -35,7 +37,7 @@ const MOVEMENT_BLOCKING_TILES = ["mountains", "wall (white square)", "wall (whit
 
 
 ///////////////////////////////////////////////////////////
-
+/*
 function Create2DArray(columns, rows) {
   let arr = new Array(rows);
   for (let i=0;i<rows;i++) {
@@ -43,6 +45,7 @@ function Create2DArray(columns, rows) {
   }
   return arr;
 }
+*/
 
 function startMusic(src, loop = true) {
   src.loop = loop;
@@ -219,42 +222,67 @@ function draw() {
 
   //draw npcs
   for (let index in ACTIVE_MAP.npcs) {
-    if ((ACTIVE_MAP.npcs[index].x > PLAYER.x - MAP_TILE_OFFSET) &&
-        (ACTIVE_MAP.npcs[index].x < PLAYER.x + MAP_TILE_OFFSET) &&
-        (ACTIVE_MAP.npcs[index].y > PLAYER.y - MAP_TILE_OFFSET) &&
-        (ACTIVE_MAP.npcs[index].y < PLAYER.y + MAP_TILE_OFFSET) &&
+    if ((ACTIVE_MAP.npcs[index].x > PLAYER.x - MAP_TILE_OFFSET - 1) &&
+        (ACTIVE_MAP.npcs[index].x < PLAYER.x + MAP_TILE_OFFSET + 1) &&
+        (ACTIVE_MAP.npcs[index].y > PLAYER.y - MAP_TILE_OFFSET - 1) &&
+        (ACTIVE_MAP.npcs[index].y < PLAYER.y + MAP_TILE_OFFSET + 1) &&
         (isPointVisible(ACTIVE_MAP.npcs[index].x,ACTIVE_MAP.npcs[index].y,PLAYER.x,PLAYER.y))) {
-          //calculate the screen x & y for the npc placement
+          let drawTile = null
           switch (ACTIVE_MAP.npcs[index].tile) {
             case "king":
-              ctx.drawImage(tile_king, (360 - (PLAYER.x - ACTIVE_MAP.npcs[index].x)*90), (360 - (PLAYER.y - ACTIVE_MAP.npcs[index].y)*90))
+              drawTile = tile_king
+              break
+            case "castle guard":
+              drawTile = tile_castle_guard
+              break
+            case "old man":
+              drawTile = tile_old_man
+              break
+            case "commoner 1":
+              drawTile = tile_commoner_1
+              break
+            case "commoner 2":
+              drawTile = tile_commoner_2
+              break
+            case "commoner 3":
+              drawTile = tile_commoner_3
+              break
+            case "commoner 4":
+              drawTile = tile_commoner_4
+              break
+            case "commoner 5":
+              drawTile = tile_commoner_5
               break
           }
+          ctx.drawImage(drawTile, (360 - (PLAYER.x - ACTIVE_MAP.npcs[index].x)*90), (360 - (PLAYER.y - ACTIVE_MAP.npcs[index].y)*90))
     }
   }
 
   //draw monsters
   for (let index = 0; index < ACTIVE_MAP.monsters.length; index++) {
-    //console.log(ACTIVE_MAP.monsters[i].name + " at (" + ACTIVE_MAP.monsters[i].x + ", " + ACTIVE_MAP.monsters[i].y + ")");
-    if ((ACTIVE_MAP.monsters[index].x > PLAYER.x - MAP_TILE_OFFSET) &&
-        (ACTIVE_MAP.monsters[index].x < PLAYER.x + MAP_TILE_OFFSET) &&
-        (ACTIVE_MAP.monsters[index].y > PLAYER.y - MAP_TILE_OFFSET) &&
-        (ACTIVE_MAP.monsters[index].y < PLAYER.y + MAP_TILE_OFFSET) &&
+    if ((ACTIVE_MAP.monsters[index].x > PLAYER.x - MAP_TILE_OFFSET - 1) &&
+        (ACTIVE_MAP.monsters[index].x < PLAYER.x + MAP_TILE_OFFSET + 1) &&
+        (ACTIVE_MAP.monsters[index].y > PLAYER.y - MAP_TILE_OFFSET - 1) &&
+        (ACTIVE_MAP.monsters[index].y < PLAYER.y + MAP_TILE_OFFSET + 1) &&
         (isPointVisible(ACTIVE_MAP.monsters[index].x,ACTIVE_MAP.monsters[index].y,PLAYER.x,PLAYER.y))) {
           //calculate the screen x & y for the npc placement
           let drawTile = null
+          //console.log(ACTIVE_MAP.monsters[index].tile + " at (" + ACTIVE_MAP.monsters[index].x + ", " + ACTIVE_MAP.monsters[index].y + ")");
           switch (ACTIVE_MAP.monsters[index].tile) {
+            case "mummy":
+              drawTile = tile_mummy
+              break
             case "rat":
-              drawTime = tile_rat
+              drawTile = tile_rat
               break
             case "scorpion":
-              drawTime = tile_scorpion
+              drawTile = tile_scorpion
               break
             case "skeleton":
-              drawTime = tile_skeleton
+              drawTile = tile_skeleton
               break
             case "skeleton guard":
-              drawTime = tile_skeleton_guard
+              drawTile = tile_skeleton_guard
               break
             case "zombie":
               drawTile = tile_zombie
@@ -356,14 +384,6 @@ async function gameLoop() {
       MESSAGE = "Game saved...";
       await ACTIVE_MAP.saveMap();
       break;
-
-    case "1":
-      activateMap("britania")
-      break
-
-    case "2":
-      activateMap("castlebritania")
-      break
   }
   draw();
   KEY_PRESS = null;
@@ -386,7 +406,7 @@ function activateMap(name) {
     console.log("name to match = " + name);
     if(GAME_MAPS[i].name == name) {
       console.log("[activateMap] Found target");
-      console.log(GAME_MAPS[i].tiles)
+      //console.log(GAME_MAPS[i].tiles)
       ACTIVE_MAP = GAME_MAPS[i]
       PLAYER.x = ACTIVE_MAP.playerStartX
       PLAYER.y = ACTIVE_MAP.playerStartY

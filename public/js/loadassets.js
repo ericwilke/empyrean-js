@@ -48,7 +48,15 @@ const tile_counter_vertical = new Image(); tile_counter_vertical.src = 'img/coun
 
 const tile_player = new Image(); tile_player.src = 'img/player.png';
 const tile_king = new Image(); tile_king.src = 'img/king.png';
+const tile_castle_guard = new Image(); tile_castle_guard.src = 'img/castle-guard.png';
+const tile_old_man = new Image(); tile_old_man.src = 'img/old-man.png';
+const tile_commoner_1 = new Image(); tile_commoner_1.src = 'img/commoner1.png';
+const tile_commoner_2 = new Image(); tile_commoner_2.src = 'img/commoner2.png';
+const tile_commoner_3 = new Image(); tile_commoner_3.src = 'img/commoner3.png';
+const tile_commoner_4 = new Image(); tile_commoner_4.src = 'img/commoner4.png';
+const tile_commoner_5 = new Image(); tile_commoner_5.src = 'img/commoner5.png';
 
+const tile_beholder = new Image(); tile_beholder.src = 'img/beholder.png';
 const tile_goblin = new Image(); tile_goblin.src = 'img/goblin.png';
 const tile_zombie = new Image(); tile_zombie.src = 'img/zombie.png';
 const tile_zombie_king = new Image(); tile_zombie_king.src = 'img/zombie-king.png';
