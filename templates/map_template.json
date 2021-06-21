@@ -31,3 +31,39 @@
   "monsters": [],
   "tiles":[[]]
 }
+
+/*
+Current tiles allowed in the MAP include:
+
+ - grass
+ - mountains
+ - desert
+ - cave
+ - forest-pine
+ - forest-oak
+ - forest-other
+ - swamp
+ - road (stone)
+ - road (dirt)
+ - wall (gray)
+ - wall (brown rough)
+ - secret wall (brown rough)
+ - secret wall (white square)
+ - wall (white square)
+ - wall (white rough)
+ - water (shallow)
+ - water (deep)
+ - stairs
+ - sign
+ - town
+ - castle
+ - ruins
+ - runestone
+ - wood
+ - door
+ - door-locked
+ - portal
+ - counter (vertical)
+ - counter (horizontal)
+
+*/

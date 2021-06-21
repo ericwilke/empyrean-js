@@ -145,4 +145,16 @@ class Player {
       this.y = y;
     }
   }
+
+  talkToPlayer(x, y, index) {
+    // get x,y along with the index of npc and interact with player
+    if (x == PLAYER.x && y == PLAYER.y) {
+      if (ACTIVE_MAP.npcs[index].greeting.length > 0) {
+        let msg = Math.floor(Math.random() * ACTIVE_MAP.npcs[index].greeting.length)
+        MESSAGE = ACTIVE_MAP.npcs[index].greeting[msg]
+        console.log(index);
+      }
+    }
+  }
+
 }
