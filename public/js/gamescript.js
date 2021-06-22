@@ -34,6 +34,12 @@ const MOVEMENT_BLOCKING_TILES = ["mountains", "wall (white square)", "wall (whit
 
 ///////////////////////////////////////////////////////////
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
 function startMusic(src, loop = true) {
   src.loop = loop;
   src.play();
@@ -139,28 +145,28 @@ async function gameLoop() {
       case "a":
         // talk left
         for (let index in ACTIVE_MAP.npcs) {
-          PLAYER.talkToPlayer(ACTIVE_MAP.npcs[index].x + 1, ACTIVE_MAP.npcs[index].y, index)
+          talkToNpc(ACTIVE_MAP.npcs[index].x + 1, ACTIVE_MAP.npcs[index].y, index)
         }
         TALK = false
         break;
       case "d":
         // talk right
         for (let index in ACTIVE_MAP.npcs) {
-          PLAYER.talkToPlayer(ACTIVE_MAP.npcs[index].x - 1, ACTIVE_MAP.npcs[index].y, index)
+          talkToNpc(ACTIVE_MAP.npcs[index].x - 1, ACTIVE_MAP.npcs[index].y, index)
         }
         TALK = false
         break;
       case "w":
         //talk up
         for (let index in ACTIVE_MAP.npcs) {
-          PLAYER.talkToPlayer(ACTIVE_MAP.npcs[index].x, ACTIVE_MAP.npcs[index].y + 1, index)
+          talkToNpc(ACTIVE_MAP.npcs[index].x, ACTIVE_MAP.npcs[index].y + 1, index)
         }
         TALK = false
         break;
       case "s":
         // talk down
         for (let index in ACTIVE_MAP.npcs) {
-          PLAYER.talkToPlayer(ACTIVE_MAP.npcs[index].x, ACTIVE_MAP.npcs[index].y - 1, index)
+          talkToNpc(ACTIVE_MAP.npcs[index].x, ACTIVE_MAP.npcs[index].y - 1, index)
         }
         TALK = false
         break;
@@ -193,6 +199,12 @@ async function gameLoop() {
         break;
       }
   }
+  // move npcs
+  for (let index in ACTIVE_MAP.npcs) {
+    moveNpc(index)
+    //console.log("moving NPC: " + index);
+  }
+
   draw();
   KEY_PRESS = null;
 }

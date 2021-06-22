@@ -53,12 +53,27 @@ class Map {
     console.log("[Map Class] saved map successfully")
   }
 
-/*
-sync swapMap(portal) {
-    console.log("new map = " + this.portals[portal])
-    await this.saveMap()
-    await loadMap(this.portals[portal])
-    console.log(this.name)
+  validTile(x,y) {
+    //let returnValue = true
+    if (x == PLAYER.x && y == PLAYER.y) { return false }
+
+    let checkTile = ACTIVE_MAP.tiles[y][x]
+
+    // add logic to handle locked doors and checking player inventory
+
+    if (MOVEMENT_BLOCKING_TILES.includes(checkTile)) { return false }
+
+    for (let index in ACTIVE_MAP.npcs) {
+      if (x == ACTIVE_MAP.npcs[index].x && y == ACTIVE_MAP.npcs[index].y) {
+        return false
+      }
+    }
+
+    for (let index = 0; index < ACTIVE_MAP.monsters.length; index++) {
+      if (x == ACTIVE_MAP.monsters[index].x && y == ACTIVE_MAP.monsters[index].y) {
+        return false
+      }
+    }
+    return true
   }
-*/
 }

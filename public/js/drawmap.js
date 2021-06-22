@@ -194,7 +194,7 @@ function draw() {
 
   ctx.drawImage(tile_player, 360, 360);
   //ctx.fillText("Key press: " + KEY_PRESS, canvas.width/2 - 90, canvas.height/2 + 200);
-  //ctx.fillText("Player X,Y: " + PLAYER.x + ", " + PLAYER.y, canvas.width/2 - 90, canvas.height/2 + 240);
+  ctx.fillText("Player X,Y: " + PLAYER.x + ", " + PLAYER.y, canvas.width/2 - 90, canvas.height/2 + 240);
   if (MESSAGE != "") {
     ctx.font = "30px Arial";
     ctx.shadowOffsetX = 5;
