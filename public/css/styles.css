@@ -12,3 +12,9 @@ canvas {
   vertical-align: top;
   line-height: normal;
 }
+
+.console {
+  font-family: serif;
+  font: georgia;
+  font-size: large;
+}

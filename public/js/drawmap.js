@@ -193,6 +193,10 @@ function draw() {
   }
 
   ctx.drawImage(tile_player, 360, 360);
+  if (SHOW_CURSOR) {
+    ctx.drawImage(tile_cursor, (360 - (PLAYER.x - CURSOR_X)*90), (360 - (PLAYER.y - CURSOR_Y)*90))
+  }
+
   //ctx.fillText("Key press: " + KEY_PRESS, canvas.width/2 - 90, canvas.height/2 + 200);
   ctx.fillText("Player X,Y: " + PLAYER.x + ", " + PLAYER.y, canvas.width/2 - 90, canvas.height/2 + 240);
   if (MESSAGE != "") {

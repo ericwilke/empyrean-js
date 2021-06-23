@@ -4,6 +4,12 @@ class Player {
     this.y
     this.currentmap
     this.hp = 11 + Math.floor(Math.random()*6)
+    this.magic = 12 + Math.floor(Math.random()*8)
+    this.regenerate = 0
+    this.max_hp = this.hp
+    this.max_magic = this.magic
+    this.hp_regen = 3
+    this.magic_regen = 3
   }
 
   setPlayerMap(mapname) {

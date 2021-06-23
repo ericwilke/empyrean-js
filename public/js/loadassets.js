@@ -13,6 +13,8 @@ const dungeonMysticalMusic = new Audio('sound/dungeon-mystical.mp3');
 
 // Sound Effects
 const blockedSound = new Audio('sound/blocked.mp3');
+const swordSound = new Audio('sound/sword.mp3')
+const bowSound = new Audio('sound/bow.mp3')
 
 // Images
 const tile_grass = new Image(); tile_grass.src = 'img/grass2.png';
@@ -47,6 +49,7 @@ const tile_counter_horizontal = new Image(); tile_counter_horizontal.src = 'img/
 const tile_counter_vertical = new Image(); tile_counter_vertical.src = 'img/counter-vertical.png';
 
 const tile_player = new Image(); tile_player.src = 'img/player.png';
+const tile_cursor = new Image(); tile_cursor.src = 'img/cursor.png';
 const tile_king = new Image(); tile_king.src = 'img/king.png';
 const tile_castle_guard = new Image(); tile_castle_guard.src = 'img/castle-guard.png';
 const tile_old_man = new Image(); tile_old_man.src = 'img/old-man.png';

@@ -26,6 +26,12 @@ let CURRENT_MUSIC = null;
 let CURRENT_THEME = null;
 let TALK = false
 let COMBAT = false
+let SHOW_CURSOR = false
+let CURSOR_X = 0
+let CURSOR_Y = 0
+let REGENERATE_LEVEL = 50
+let CONSOLE = document.getElementById("console")
+let CONSOLE_TEXT
 let GAME_MAPS = []
 let MESSAGE = "Start your adventure!\nDanger awaits!";
 const THEMES = ["adventure (mellow)", "adventure (epic)", "adventure (dramtic)", "fantasy (epic)", "town", "village", "dungeon (mystical)", "tavern", "danger", "combat", "dungeon", "horror", "sewer"];
@@ -136,7 +142,44 @@ async function gameLoop() {
     switch(KEY_PRESS) {
       case "Enter":
         COMBAT = false
-        MESSAGE = "Target selected..."
+        SHOW_CURSOR = false
+        MESSAGE = "Nothing to attack"
+        for (let index in ACTIVE_MAP.monsters) {
+          if ((ACTIVE_MAP.monsters[index].x == CURSOR_X) && (ACTIVE_MAP.monsters[index].y == CURSOR_Y)) {
+            // attack target
+            MESSAGE = "Target selected..." + ACTIVE_MAP.monsters[index].tile
+            startMusic(swordSound, false)
+          }
+        }
+        break
+      case "a":
+        CURSOR_X--
+        if (CURSOR_X < PLAYER.x - MAP_TILE_OFFSET) {
+          CURSOR_X = PLAYER.x - MAP_TILE_OFFSET
+        }
+        break
+      case "d":
+        CURSOR_X++
+        if (CURSOR_X < PLAYER.x - MAP_TILE_OFFSET) {
+          CURSOR_X = PLAYER.x - MAP_TILE_OFFSET
+        }
+        break
+      case "w":
+        CURSOR_Y--
+        if (CURSOR_Y < PLAYER.y - MAP_TILE_OFFSET) {
+          CURSOR_Y = PLAYER.y - MAP_TILE_OFFSET
+        }
+        break
+      case "s":
+        CURSOR_Y++
+        if (CURSOR_Y < PLAYER.y - MAP_TILE_OFFSET) {
+          CURSOR_Y = PLAYER.y - MAP_TILE_OFFSET
+        }
+        break
+      case " ":
+        COMBAT = false
+        SHOW_CURSOR = false
+        MESSAGE = "Combat aborted"
         break
     }
   } else if (TALK) {
@@ -191,7 +234,10 @@ async function gameLoop() {
         break;
       case " ":
         COMBAT = true
-        MESSAGE = "ATTACK: select target"
+        SHOW_CURSOR = true
+        CURSOR_X = PLAYER.x
+        CURSOR_Y = PLAYER.y
+        MESSAGE = "ATTACK: select target, then press ENTER"
         break
       case "+":
         MESSAGE = "Game saved...";
@@ -199,11 +245,22 @@ async function gameLoop() {
         break;
       }
   }
-  // move npcs
-  for (let index in ACTIVE_MAP.npcs) {
-    moveNpc(index)
-    //console.log("moving NPC: " + index);
+  // move npcs and monsters
+  if (!COMBAT) {
+    moveNpc();
+    monsterMoveAndAttack()
   }
+
+  PLAYER.regenerate++
+  if (PLAYER.regenerate > REGENERATE_LEVEL) {
+    PLAYER.hp = PLAYER.hp + PLAYER.hp_regen
+    if (PLAYER.hp > PLAYER.max_hp) { PLAYER.hp = PLAYER.max_hp }
+    PLAYER.magic = PLAYER.magic + PLAYER.magic_regen
+    if (PLAYER.magic > PLAYER.max_magic) { PLAYER.magic = PLAYER.max_magic }
+    PLAYER.regenerate = 0
+  }
+  CONSOLE_TEXT = "<h1>Stats</h1><hr> HP: " + PLAYER.hp + " / MAGIC: " + PLAYER.magic + "<hr><h3>Inventory:</h3>"
+  CONSOLE.innerHTML = CONSOLE_TEXT
 
   draw();
   KEY_PRESS = null;
