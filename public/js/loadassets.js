@@ -10,6 +10,7 @@ const epicThemeMusic = new Audio('sound/epic-theme.mp3');
 const medievalThemeMusic = new Audio('sound/medieval-music.mp3');
 const villageMusic = new Audio('sound/village.mp3');
 const dungeonMysticalMusic = new Audio('sound/dungeon-mystical.mp3');
+const dungeonDarkMusic = new Audio('sound/dungeon-dark.mp3');
 
 // Sound Effects
 const blockedSound = new Audio('sound/blocked.mp3');
@@ -58,6 +59,10 @@ const tile_commoner_2 = new Image(); tile_commoner_2.src = 'img/commoner2.png';
 const tile_commoner_3 = new Image(); tile_commoner_3.src = 'img/commoner3.png';
 const tile_commoner_4 = new Image(); tile_commoner_4.src = 'img/commoner4.png';
 const tile_commoner_5 = new Image(); tile_commoner_5.src = 'img/commoner5.png';
+const tile_nobel = new Image(); tile_nobel.src = 'img/nobel.png';
+const tile_sailor = new Image(); tile_sailor.src = 'img/sailor.png';
+const tile_pirate = new Image(); tile_pirate.src = 'img/pirate.png';
+const tile_ranger = new Image(); tile_ranger.src = 'img/ranger.png';
 
 const tile_beholder = new Image(); tile_beholder.src = 'img/beholder.png';
 const tile_goblin = new Image(); tile_goblin.src = 'img/goblin.png';
@@ -68,3 +73,12 @@ const tile_skeleton_guard = new Image(); tile_skeleton_guard.src = 'img/skeleton
 const tile_scorpion = new Image(); tile_scorpion.src = 'img/scorpion.png';
 const tile_rat = new Image(); tile_rat.src = 'img/rat.png';
 const tile_mummy = new Image(); tile_mummy.src = 'img/mummy.png';
+const tile_kobold = new Image(); tile_kobold.src = 'img/kobold.png';
+const tile_orc = new Image(); tile_orc.src = 'img/orc.png';
+const tile_spider = new Image(); tile_spider.src = 'img/spider.png';
+const tile_troll= new Image(); tile_troll.src = 'img/troll.png';
+const tile_wyvern = new Image(); tile_wyvern.src = 'img/wyvern.png';
+const tile_fire_elemental = new Image(); tile_fire_elemental.src = 'img/fire-elemental.png';
+const tile_fly = new Image(); tile_fly.src = 'img/fly.png';
+const tile_snake = new Image(); tile_snake.src = 'img/snake.png';
+const tile_dragon = new Image(); tile_dragon.src = 'img/dragon.png';

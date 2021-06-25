@@ -22,7 +22,8 @@
       "heal": "yes",
       "buy_sell": "no",
       "give_item": {},
-      "teach_spell": {"spell": "heal", "msg": "I will teach you the HEAL spell."}
+      "teach_spell": {"spell": "heal", "msg": "I will teach you the HEAL spell."},
+      "addPortal":{}
     }
   },
   "spawnfrequency":0,

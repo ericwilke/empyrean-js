@@ -1,5 +1,32 @@
 // monster code
 
+function spawnMonster () {
+  if (ACTIVE_MAP.spawnfrequency == 0) { return }
+  if (ACTIVE_MAP.monsters.legth + 1 >= ACTIVE_MAP.maxmonsters) { return }
+
+  spawnroll = getRandomInt(1,100)
+  if (spawnroll > ACTIVE_MAP.spawnfrequency) { return } //if the roll is higher than the frequency, no monster spawns
+
+  let x = getRandomInt(0, MAP_WIDTH - 1)
+  let y = getRandomInt(0, MAP_HEIGHT - 1)
+
+  let flag = ACTIVE_MAP.validTile(x,y)
+
+  while (!flag) {
+    x = getRandomInt(0, MAP_WIDTH - 1)
+    y = getRandomInt(0, MAP_HEIGHT - 1)
+    flag = ACTIVE_MAP.validTile(x,y)
+  }
+
+  flag = true
+  while (flag) {
+    let choice = getRandomInt(0, ACTIVE_MAP.spawntypes.length - 1)
+    let monstertype = ACTIVE_MAP.spawntypes[choice]
+    flag = false
+    console.log("picking monster type: "+ monstertype);
+  }
+}
+
 function monsterMoveAndAttack () {
   // If monster can see player, move toward player.
   //  Otherwise, move randomly.
@@ -12,10 +39,11 @@ function monsterMoveAndAttack () {
       let d = getRandomInt(1,2)
       if (isPointVisible(new_x, new_y, PLAYER.x, PLAYER.y)) {
         // monster can see player
-        let distance = Math.floor(Math.sqrt(Math.pow(new_x - PLAYER.x, 2) + Math.pow(new_y - PLAYER.y, 2)))
+        //let distance = Math.floor(Math.sqrt(Math.pow(new_x - PLAYER.x, 2) + Math.pow(new_y - PLAYER.y, 2)))
+        let dist = distance(new_x, new_y, PLAYER.x, PLAYER.y)
         // if distance is greater than attack range, move monster
         // EDIT the "0" below to reflect the monster attack range
-        if (distance > 1) {
+        if (dist > 1) {
           // move toward player
           if ((d == 1 && (new_x != PLAYER.x)) || (new_y == PLAYER.y)) {
             // move on x-axis

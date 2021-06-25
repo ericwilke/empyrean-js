@@ -148,6 +148,12 @@ function draw() {
             case "commoner 5":
               drawTile = tile_commoner_5
               break
+            case "sign":
+              drawTile = tile_sign
+              break
+            case "nobel":
+              drawTile = tile_nobel
+              break
           }
           ctx.drawImage(drawTile, (360 - (PLAYER.x - ACTIVE_MAP.npcs[index].x)*90), (360 - (PLAYER.y - ACTIVE_MAP.npcs[index].y)*90))
     }
@@ -184,6 +190,21 @@ function draw() {
               break
             case "zombie king":
               drawTile = tile_zombie_king
+              break
+            case "kobold":
+              drawTile = tile_kobold
+              break
+            case "orc":
+              drawTile = tile_orc
+              break
+            case "spider":
+              drawTile = tile_spider
+              break
+            case "troll":
+              drawTile = tile_troll
+              break
+            case "wyvern":
+              drawTile = tile_wyvern
               break
           }
           if (drawTile) {

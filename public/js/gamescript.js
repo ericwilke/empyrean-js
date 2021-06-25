@@ -4,6 +4,18 @@
 //
 // A Javascript browser game in the vain of Ultima.
 
+// To Do:
+//
+// - adding in checks for difficult terrain (swamp, forest, hills)
+// - adding modifications to stats based on items
+// - save state of player
+// - add combat
+// - add inventory management
+// - add spell casting and magic
+// - buying and selling
+// - map modifications based on NPCs and quests
+// - questing system
+
 console.log("=== START SCRIPT ===");
 
 // Set up canvas DOM element.
@@ -34,7 +46,8 @@ let CONSOLE = document.getElementById("console")
 let CONSOLE_TEXT
 let GAME_MAPS = []
 let MESSAGE = "Start your adventure!\nDanger awaits!";
-const THEMES = ["adventure (mellow)", "adventure (epic)", "adventure (dramtic)", "fantasy (epic)", "town", "village", "dungeon (mystical)", "tavern", "danger", "combat", "dungeon", "horror", "sewer"];
+let ITEM_EFFECTS = {"int": 0, "str": 0, "dex":0, "armor": 0, "melee": 0, "range": 0, "hp": 0, "magic": 0}
+const THEMES = ["adventure (mellow)", "adventure (epic)", "adventure (dramtic)", "fantasy (epic)", "town", "village", "dungeon (mystical)", "dungeon (dark)", "tavern", "danger", "combat", "dungeon", "horror", "sewer"];
 const VISON_BLOCKING_TILES = ["mountains", "door", "wall (white square)", "wall (white rough)", "wall (gray)", "wall (brown rough)", "secret wall (white square)", "secret wall (brown rough)","door-locked"];
 const MOVEMENT_BLOCKING_TILES = ["mountains", "wall (white square)", "wall (white rough)", "wall (gray)", "wall (brown rough)", "water (deep)", "door-locked", "counter (vertical)", "counter (horizontal)"];
 
@@ -44,6 +57,17 @@ function getRandomInt(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
   return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+function distance(x1, y1, x2, y2) {
+  return Math.floor(Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)))
+}
+
+function getItemEffects() {
+  ITEM_EFFECTS = {"int": 0, "str": 0, "dex":0, "armor": 0, "melee": 0, "range": 0, "hp": 0, "magic": 0}
+  for (item in PLAYER.inventory) {
+    // check each player item and add the modifier to the ITEM_EFFECTS
+  }
 }
 
 function startMusic(src, loop = true) {
@@ -129,6 +153,10 @@ function themeMusic() {
         CURRENT_MUSIC = dungeonMysticalMusic;
         startMusic(CURRENT_MUSIC);
         break;
+      case "dungeon (dark)":
+        CURRENT_MUSIC = dungeonDarkMusic;
+        startMusic(CURRENT_MUSIC);
+        break;
     }
   }
 }
@@ -160,8 +188,8 @@ async function gameLoop() {
         break
       case "d":
         CURSOR_X++
-        if (CURSOR_X < PLAYER.x - MAP_TILE_OFFSET) {
-          CURSOR_X = PLAYER.x - MAP_TILE_OFFSET
+        if (CURSOR_X > PLAYER.x + MAP_TILE_OFFSET) {
+          CURSOR_X = PLAYER.x + MAP_TILE_OFFSET
         }
         break
       case "w":
@@ -172,8 +200,8 @@ async function gameLoop() {
         break
       case "s":
         CURSOR_Y++
-        if (CURSOR_Y < PLAYER.y - MAP_TILE_OFFSET) {
-          CURSOR_Y = PLAYER.y - MAP_TILE_OFFSET
+        if (CURSOR_Y > PLAYER.y + MAP_TILE_OFFSET) {
+          CURSOR_Y = PLAYER.y + MAP_TILE_OFFSET
         }
         break
       case " ":
@@ -249,17 +277,26 @@ async function gameLoop() {
   if (!COMBAT) {
     moveNpc();
     monsterMoveAndAttack()
+    spawnMonster()
   }
 
   PLAYER.regenerate++
   if (PLAYER.regenerate > REGENERATE_LEVEL) {
     PLAYER.hp = PLAYER.hp + PLAYER.hp_regen
-    if (PLAYER.hp > PLAYER.max_hp) { PLAYER.hp = PLAYER.max_hp }
+    if (PLAYER.hp > PLAYER.max_hp + ITEM_EFFECTS["hp"]) { PLAYER.hp = PLAYER.max_hp + ITEM_EFFECTS["hp"] }
     PLAYER.magic = PLAYER.magic + PLAYER.magic_regen
-    if (PLAYER.magic > PLAYER.max_magic) { PLAYER.magic = PLAYER.max_magic }
+    if (PLAYER.magic > PLAYER.max_magic + ITEM_EFFECTS["magic"]) { PLAYER.magic = PLAYER.max_magic + ITEM_EFFECTS["magic"] }
     PLAYER.regenerate = 0
   }
-  CONSOLE_TEXT = "<h1>Stats</h1><hr> HP: " + PLAYER.hp + " / MAGIC: " + PLAYER.magic + "<hr><h3>Inventory:</h3>"
+  CONSOLE_TEXT = "<h1>Stats</h1><hr>"
+  if (PLAYER.hp < 5) {
+    CONSOLE_TEXT += "<span style='background-color:red; color:white;'> HP: " + PLAYER.hp + "</span>"
+  } else { CONSOLE_TEXT += "HP: " + PLAYER.hp }
+  CONSOLE_TEXT += " / MAGIC: " + PLAYER.magic
+  CONSOLE_TEXT += "<br>STR: +" + PLAYER.str + " / DEX: +" + PLAYER.dex + " / INT: +" + PLAYER.int
+  CONSOLE_TEXT += "<hr><h3>Weapon: " + PLAYER.weapon + "</h3>"
+  CONSOLE_TEXT += "<hr><h3>Inventory:</h3>"
+  CONSOLE_TEXT += "<br><hr><h3>Spells:</h3>"
   CONSOLE.innerHTML = CONSOLE_TEXT
 
   draw();

@@ -1,0 +1,20 @@
+ITEMS = {
+    "potion of healing +10": "20:25",
+    "potion of healing +20": "50:60",
+    "potion of magic +10": "20:30",
+    "potion of magic +20": "55:65",
+    "ring of strength +2": "200:275",
+    "ring of dexterity +2": "200:275",
+    "ring of intelligence +2": "225:280",
+    "helm of magic +5": "300:350",
+    "scroll of heal": "200:250",
+    "scroll of turn undead": "500:575",
+    "scroll of magic missile": "200:250",
+    "scroll of intelligence +2": "600:650",
+    "skeleton key": "500:550",
+    "dagger": "15:18",
+    "short sword": "50:60",
+    "short bow": "55:65",
+    "long sword": "100:125",
+    "great sword": "280:330"
+}
