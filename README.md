@@ -18,8 +18,8 @@ In the text of the item in the file ITEMS.json, adding any of the following text
 
     (+X STAT)
 
-`X` is an integer, and `STAT` refers to any of the player stats (`hp`, `str`, `dex`, `magic`, `armor`, `melee`, `range`)
+`X` is an integer, and `STAT` refers to any of the player stats (`hp`, `strength`, `dexterity`, `intelligence`, `wisdom`, `magic`, `armor`, `melee`, `range`)
 
-The number after the "+" will be applied to the corresponding stat of the player.
+The number after the "+" or "-" will be applied to the corresponding stat of the player.
 
-Examples: `golden amulet (+2 armor)`, `silver ring (+1 range)`
+Examples: `golden amulet (+2 armor)`, `silver ring (+1 range)`, `potion of healing (+10 hp)`, `ring of giant strength (+2 strength/-2 intelligence)`

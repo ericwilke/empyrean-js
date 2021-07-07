@@ -206,6 +206,18 @@ function draw() {
             case "wyvern":
               drawTile = tile_wyvern
               break
+            case "goblin":
+              drawTile = tile_goblin
+              break
+            case "snake":
+              drawTile = tile_snake
+              break
+            case "dragon":
+              drawTile = tile_dragon
+              break
+            case "fire elemental":
+              drawTile = tile_fire_elemental
+              break
           }
           if (drawTile) {
             ctx.drawImage(drawTile, (360 - (PLAYER.x - ACTIVE_MAP.monsters[index].x)*90), (360 - (PLAYER.y - ACTIVE_MAP.monsters[index].y)*90))

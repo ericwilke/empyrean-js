@@ -20,10 +20,13 @@ function spawnMonster () {
 
   flag = true
   while (flag) {
-    let choice = getRandomInt(0, ACTIVE_MAP.spawntypes.length - 1)
-    let monstertype = ACTIVE_MAP.spawntypes[choice]
+    const choice = getRandomInt(0, ACTIVE_MAP.spawntypes.length - 1)
+    const hp_stat = MONSTERS[ACTIVE_MAP.spawntypes[choice]].hp
+    const hp_range = hp_stat.split(":")
+    const hp = getRandomInt(parseInt(hp_range[0]), parseInt(hp_range[1]))
+    const newMonster = {"tile": ACTIVE_MAP.spawntypes[choice], "x": x, "y": y, "hp": hp}
+    ACTIVE_MAP.monsters.push(newMonster)
     flag = false
-    console.log("picking monster type: "+ monstertype);
   }
 }
 
@@ -64,7 +67,22 @@ function monsterMoveAndAttack () {
           }
         } else {
           // attack
-          MESSAGE += "\n" + ACTIVE_MAP.monsters[index].tile + " attacks!"
+          MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " attacks!"
+          let attackRoll = getRandomInt(1,20) + MONSTERS[ACTIVE_MAP.monsters[index].tile].attack.bonus
+          if (attackRoll >= ARMOR[PLAYER.armor].armor_class) {
+            let damageTotal = 0
+            let damage = 0
+            const damageStats = MONSTERS[ACTIVE_MAP.monsters[index].tile].attack.damage.split("/")
+            for (i=0; i < damageStats.length; i++) {
+              const damageInfo = damageStats[i].split("-")
+              if (damageInfo[0].includes(ARMOR[PLAYER.armor].resists)) {
+                damage = Math.floor((getRandomInt(1,damageInfo[1])+1)/2)
+              } else { damage = getRandomInt(1,damageInfo[1])+1 }
+              MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " hit for " + damage + " " + damageInfo[0] + " damage!"
+              damageTotal += damage
+            }
+            PLAYER.hp -= damageTotal
+          } else { MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " missed." }
         }
       } else {
         // monster cannot see player, move normally

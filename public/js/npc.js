@@ -73,5 +73,10 @@ function talkToNpc(x, y, index) {
       let msg = Math.floor(Math.random() * ACTIVE_MAP.npcs[index].greeting.length)
       MESSAGE = ACTIVE_MAP.npcs[index].greeting[msg]
     }
+    if (ACTIVE_MAP.npcs[index].heal == "yes" && (PLAYER.hp < PLAYER.max_hp + ITEM_EFFECTS["hp"])) {
+      MESSAGE += "\nLet me heal your wounds..."
+      startMusic(healSound, false)
+      PLAYER.hp = PLAYER.max_hp + ITEM_EFFECTS["hp"]
+    }
   }
 }

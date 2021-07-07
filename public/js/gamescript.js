@@ -64,9 +64,10 @@ function distance(x1, y1, x2, y2) {
 }
 
 function getItemEffects() {
-  ITEM_EFFECTS = {"int": 0, "str": 0, "dex":0, "armor": 0, "melee": 0, "range": 0, "hp": 0, "magic": 0}
+  ITEM_EFFECTS = {"int": 0, "wis": 0, "str": 0, "dex":0, "armor": 0, "hp": 0, "magic": 0}
   for (item in PLAYER.inventory) {
     // check each player item and add the modifier to the ITEM_EFFECTS
+    // look at the README.md before coding
   }
 }
 
@@ -169,14 +170,55 @@ async function gameLoop() {
     // deal with combat
     switch(KEY_PRESS) {
       case "Enter":
-        COMBAT = false
-        SHOW_CURSOR = false
-        MESSAGE = "Nothing to attack"
+        COMBAT = false // allow for normal key input
+        SHOW_CURSOR = false // stop showing attack cursor
+        MESSAGE = "Nothing to attack" // default message
         for (let index in ACTIVE_MAP.monsters) {
           if ((ACTIVE_MAP.monsters[index].x == CURSOR_X) && (ACTIVE_MAP.monsters[index].y == CURSOR_Y)) {
             // attack target
-            MESSAGE = "Target selected..." + ACTIVE_MAP.monsters[index].tile
-            startMusic(swordSound, false)
+            if (distance(PLAYER.x, PLAYER.y, ACTIVE_MAP.monsters[index].x, ACTIVE_MAP.monsters[index].y) <= WEAPONS[PLAYER.weapon].range) {
+              MESSAGE = "Attacking the " + ACTIVE_MAP.monsters[index].tile + "... "
+              let attackRoll = getRandomInt(1,20)
+              let crit = false
+              if (attackRoll == 20) { crit = true }
+              switch (WEAPONS[PLAYER.weapon].type) {
+                case "melee":
+                  attackRoll += PLAYER.str
+                  break
+                case "range":
+                  attackRoll += PLAYER.dex
+                  break
+              }
+              attackRoll += WEAPONS[PLAYER.weapon].bonus
+              //console.log("attack roll = " + attackRoll)
+              //console.log("monster armor class = " + MONSTERS[ACTIVE_MAP.monsters[index].tile].armor_class)
+              if (attackRoll >= MONSTERS[ACTIVE_MAP.monsters[index].tile].armor_class) {
+                // Hit!!
+                if (WEAPONS[PLAYER.weapon].type == "range") {startMusic(bowSound, false)}
+                  else {startMusic(swordSound, false)}
+                const damageTypes = (WEAPONS[PLAYER.weapon].damage).split("/")
+                for (let i=0; i < damageTypes.length; i++) {
+                  let damageStats = damageTypes[i].split("-")
+                  let damageAmount = getRandomInt(1, parseInt(damageStats[1]))
+                  if (crit) { damageAmount = damageAmount * 2; MESSAGE += " Critical hit!" }
+                  // check for damage resistance by monster
+                  if ((MONSTERS[ACTIVE_MAP.monsters[index].tile].resists).includes(damageStats[0])) {
+                    damageAmount = Math.floor(damageAmount/2)
+                  }
+                  MESSAGE += "\nHit for " + damageAmount + " " + damageStats[0] + " damage!"
+                  ACTIVE_MAP.monsters[index].hp -= damageAmount
+                }
+              } else { MESSAGE += "Missed!"; startMusic(missSound, false)}
+            } else { MESSAGE = ACTIVE_MAP.monsters[index].tile + " is out of range."}
+          }
+          if (ACTIVE_MAP.monsters[index].hp < 1) {
+            // monster killed!
+            MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " was killed!"
+
+            // add treasure
+
+            // remove monster from array
+            ACTIVE_MAP.monsters.splice(index, 1)
           }
         }
         break
@@ -293,7 +335,8 @@ async function gameLoop() {
     CONSOLE_TEXT += "<span style='background-color:red; color:white;'> HP: " + PLAYER.hp + "</span>"
   } else { CONSOLE_TEXT += "HP: " + PLAYER.hp }
   CONSOLE_TEXT += " / MAGIC: " + PLAYER.magic
-  CONSOLE_TEXT += "<br>STR: +" + PLAYER.str + " / DEX: +" + PLAYER.dex + " / INT: +" + PLAYER.int
+  CONSOLE_TEXT += "<br>STR: +" + PLAYER.str + " / DEX: +" + PLAYER.dex
+  CONSOLE_TEXT += "<br>INT: +" + PLAYER.int + " / WIS: +" + PLAYER.wis
   CONSOLE_TEXT += "<hr><h3>Weapon: " + PLAYER.weapon + "</h3>"
   CONSOLE_TEXT += "<hr><h3>Inventory:</h3>"
   CONSOLE_TEXT += "<br><hr><h3>Spells:</h3>"

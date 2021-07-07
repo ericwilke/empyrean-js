@@ -6,6 +6,7 @@ class Player {
     this.str = getRandomInt(1,3)
     this.dex = getRandomInt(1,3)
     this.int = getRandomInt(1,3)
+    this.wis = getRandomInt(1,3)
     this.hp = 11 + Math.floor(Math.random()*6)
     this.magic = 12 + Math.floor(Math.random()*8)
     this.regenerate = 0
@@ -14,7 +15,7 @@ class Player {
     this.hp_regen = 3
     this.magic_regen = 3
     this.weapon = "dagger"
-    this.armor = ""
+    this.armor = "none"
     this.spells = []
     this.inventory = []
   }

@@ -16,6 +16,8 @@ const dungeonDarkMusic = new Audio('sound/dungeon-dark.mp3');
 const blockedSound = new Audio('sound/blocked.mp3');
 const swordSound = new Audio('sound/sword.mp3')
 const bowSound = new Audio('sound/bow.mp3')
+const healSound = new Audio('sound/heal.mp3')
+const missSound = new Audio('sound/miss.mp3')
 
 // Images
 const tile_grass = new Image(); tile_grass.src = 'img/grass2.png';
