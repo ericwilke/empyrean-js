@@ -80,6 +80,7 @@ function monsterMoveAndAttack () {
               } else { damage = getRandomInt(1,damageInfo[1])+1 }
               MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " hit for " + damage + " " + damageInfo[0] + " damage!"
               damageTotal += damage
+              startMusic(hitInCombatSound, false)
             }
             PLAYER.hp -= damageTotal
           } else { MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " missed." }

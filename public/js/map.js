@@ -76,4 +76,13 @@ class Map {
     }
     return true
   }
+
+  difficutTerrain(x,y) {
+    if(DIFFICULT_TERRAIN.includes(ACTIVE_MAP.tiles[y][x])) {
+      if (getRandomInt(1,3) == 1) {
+        return true
+      } else {return false}
+    } else {return false}
+  }
+
 }

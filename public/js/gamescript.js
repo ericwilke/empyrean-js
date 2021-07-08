@@ -36,11 +36,14 @@ let MAP_WIDTH = 0;
 let MAP_HEIGHT = 0;
 let CURRENT_MUSIC = null;
 let CURRENT_THEME = null;
+
 let TALK = false
 let COMBAT = false
+let CAST = false
 let SHOW_CURSOR = false
 let CURSOR_X = 0
 let CURSOR_Y = 0
+
 let REGENERATE_LEVEL = 50
 let CONSOLE = document.getElementById("console")
 let CONSOLE_TEXT
@@ -50,6 +53,7 @@ let ITEM_EFFECTS = {"int": 0, "str": 0, "dex":0, "armor": 0, "melee": 0, "range"
 const THEMES = ["adventure (mellow)", "adventure (epic)", "adventure (dramtic)", "fantasy (epic)", "town", "village", "dungeon (mystical)", "dungeon (dark)", "tavern", "danger", "combat", "dungeon", "horror", "sewer"];
 const VISON_BLOCKING_TILES = ["mountains", "door", "wall (white square)", "wall (white rough)", "wall (gray)", "wall (brown rough)", "secret wall (white square)", "secret wall (brown rough)","door-locked"];
 const MOVEMENT_BLOCKING_TILES = ["mountains", "wall (white square)", "wall (white rough)", "wall (gray)", "wall (brown rough)", "water (deep)", "door-locked", "counter (vertical)", "counter (horizontal)"];
+const DIFFICULT_TERRAIN = ["swamp", "water (shallow)", "desert", "forest-pine", "forest-oak", "forest-other"]
 
 ///////////////////////////////////////////////////////////
 
@@ -169,7 +173,7 @@ async function gameLoop() {
   if (COMBAT) {
     // deal with combat
     switch(KEY_PRESS) {
-      case "Enter":
+      case " ":
         COMBAT = false // allow for normal key input
         SHOW_CURSOR = false // stop showing attack cursor
         MESSAGE = "Nothing to attack" // default message
@@ -246,7 +250,7 @@ async function gameLoop() {
           CURSOR_Y = PLAYER.y + MAP_TILE_OFFSET
         }
         break
-      case " ":
+      case "Enter":
         COMBAT = false
         SHOW_CURSOR = false
         MESSAGE = "Combat aborted"
@@ -284,7 +288,42 @@ async function gameLoop() {
         TALK = false
         break;
       }
-  } else {
+  } else if (CAST) {
+    // deal with spell casting
+    let activeSpell = ""
+    switch(KEY_PRESS) {
+      case "Enter":
+        CAST = false
+        SHOW_CURSOR = false
+        MESSAGE = "Cast aborted"
+        break
+      case "a":
+        CURSOR_X--
+        if (CURSOR_X < PLAYER.x - MAP_TILE_OFFSET) {
+          CURSOR_X = PLAYER.x - MAP_TILE_OFFSET
+        }
+        break
+      case "d":
+        CURSOR_X++
+        if (CURSOR_X > PLAYER.x + MAP_TILE_OFFSET) {
+          CURSOR_X = PLAYER.x + MAP_TILE_OFFSET
+        }
+        break
+      case "w":
+        CURSOR_Y--
+        if (CURSOR_Y < PLAYER.y - MAP_TILE_OFFSET) {
+          CURSOR_Y = PLAYER.y - MAP_TILE_OFFSET
+        }
+        break
+      case "s":
+        CURSOR_Y++
+        if (CURSOR_Y > PLAYER.y + MAP_TILE_OFFSET) {
+          CURSOR_Y = PLAYER.y + MAP_TILE_OFFSET
+        }
+        break
+    }
+  }
+  else {
     switch(KEY_PRESS) {
       case "a":
         PLAYER.moveLeft();
@@ -307,16 +346,31 @@ async function gameLoop() {
         SHOW_CURSOR = true
         CURSOR_X = PLAYER.x
         CURSOR_Y = PLAYER.y
-        MESSAGE = "ATTACK: select target, then press ENTER"
+        MESSAGE = "ATTACK: select target, then press SPACE\nor ENTER to cancel"
         break
+      case "c":
+        if (PLAYER.spells.length == 0) {
+          MESSAGE = "You do not have any spells available"
+          CAST = false
+          SHOW_CURSOR = false
+          break
+        } else {
+          CAST = true
+          SHOW_CURSOR = true
+          CURSOR_X = PLAYER.x
+          CURSOR_Y = PLAYER.y
+          MESSAGE = "CAST SPELL: choose spell number\nor ENTER to cancel"
+          break
+        }
       case "+":
         MESSAGE = "Game saved...";
         await ACTIVE_MAP.saveMap();
         break;
       }
   }
+
   // move npcs and monsters
-  if (!COMBAT) {
+  if (!COMBAT && !CAST) {
     moveNpc();
     monsterMoveAndAttack()
     spawnMonster()

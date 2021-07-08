@@ -42,11 +42,16 @@ class Player {
     if (ACTIVE_MAP.validTile(x, this.y)) {
       const portal = this.checkForPortal(x,this.y)
       if (portal != null) {
-        //console.log("TEST for LOAD: Need to switch maps");
         PLAYER.currentmap = portal
         ACTIVE_MAP.saveMap()
         activateMap(portal)
-      } else { this.x = x}
+      } else {
+        // check for difficut terrain
+        if (ACTIVE_MAP.difficutTerrain(x, this.y)) {
+          x = this.x
+        }
+        this.x = x
+      }
     } else {
         startMusic(blockedSound, false);
     }
@@ -63,7 +68,13 @@ class Player {
         PLAYER.currentmap = portal
         ACTIVE_MAP.saveMap()
         activateMap(portal)
-      } else { this.x = x}
+      } else {
+        // check for difficut terrain
+        if (ACTIVE_MAP.difficutTerrain(x, this.y)) {
+          x = this.x
+        }
+        this.x = x
+      }
     } else {
         startMusic(blockedSound, false);
     }
@@ -80,7 +91,13 @@ class Player {
         PLAYER.currentmap = portal
         ACTIVE_MAP.saveMap()
         activateMap(portal)
-      } else { this.y = y}
+      } else {
+        // check for difficut terrain
+        if (ACTIVE_MAP.difficutTerrain(this.x, y)) {
+          y = this.y
+        }
+        this.y = y
+      }
     } else {
         startMusic(blockedSound, false);
     }
@@ -97,7 +114,13 @@ class Player {
         PLAYER.currentmap = portal
         ACTIVE_MAP.saveMap()
         activateMap(portal)
-      } else { this.y = y}
+      } else {
+        // check for difficut terrain
+        if (ACTIVE_MAP.difficutTerrain(this.x, y)) {
+          y = this.y
+        }
+        this.y = y
+      }
     } else {
         startMusic(blockedSound, false);
     }

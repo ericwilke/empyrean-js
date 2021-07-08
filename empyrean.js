@@ -26,7 +26,7 @@ app.post('/api/savemap', (req, res) => {
   console.log("Saved map: " + jsonString.name)
 })
 
-app.listen(port, () => console.log('Express server started on port ${port}; ' + 'press Ctrl-C to terminate...'))
+app.listen(port, () => console.log(`Express server started on port ${port}; ` + 'press Ctrl-C to terminate...'))
 
 function saveJSON(url, jsonString) {
   fs.writeFile(__dirname + url, jsonString, err => {

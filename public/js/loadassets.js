@@ -18,6 +18,7 @@ const swordSound = new Audio('sound/sword.mp3')
 const bowSound = new Audio('sound/bow.mp3')
 const healSound = new Audio('sound/heal.mp3')
 const missSound = new Audio('sound/miss.mp3')
+const hitInCombatSound = new Audio('sound/hit_in_combat.mp3')
 
 // Images
 const tile_grass = new Image(); tile_grass.src = 'img/grass2.png';
