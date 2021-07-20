@@ -20,7 +20,7 @@ class Map {
     this.npcs = data.npcs
 
     this.portals = data.portals
-    this.lockedDoors = data.lockedDoors
+    this.locked_doors = data.locked_doors
 
     this.spawnfrequency = data.spawnfrequency
     this.spawntypes = data.spawntypes
@@ -57,11 +57,19 @@ class Map {
     //let returnValue = true
     if (x == PLAYER.x && y == PLAYER.y) { return false }
 
-    let checkTile = ACTIVE_MAP.tiles[y][x]
-
     // add logic to handle locked doors and checking player inventory
+    if (ACTIVE_MAP.tiles[y][x] == "door-locked") {
+      const index = x + "," + y
+      if (PLAYER.inventory.includes(ACTIVE_MAP.locked_doors[index])) {
+        // OPEN DOOR
+        ACTIVE_MAP.tiles[y][x] = "door"
+        MESSAGE = "Door unlocked using " + ACTIVE_MAP.locked_doors[index]
+      } else {
+        MESSAGE = "The door is locked..."
+      }
+    }
 
-    if (MOVEMENT_BLOCKING_TILES.includes(checkTile)) { return false }
+    if (MOVEMENT_BLOCKING_TILES.includes(ACTIVE_MAP.tiles[y][x])) { return false }
 
     for (let index in ACTIVE_MAP.npcs) {
       if (x == ACTIVE_MAP.npcs[index].x && y == ACTIVE_MAP.npcs[index].y) {

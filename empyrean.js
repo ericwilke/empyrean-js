@@ -20,10 +20,17 @@ app.get('/play', (req, res) =>{
 })
 
 app.post('/api/savemap', (req, res) => {
-  console.log("POST request")
+  console.log("POST request (save map)")
   const jsonString = req.body
   saveJSON("/public/data/"+jsonString.name+".json", JSON.stringify(jsonString))
   console.log("Saved map: " + jsonString.name)
+})
+
+app.post('/api/saveplayer', (req, res) => {
+  console.log("POST request (player save)")
+  const jsonString = req.body
+  saveJSON("/public/data/player.json", JSON.stringify(jsonString))
+  console.log("Saved player data")
 })
 
 app.listen(port, () => console.log(`Express server started on port ${port}; ` + 'press Ctrl-C to terminate...'))

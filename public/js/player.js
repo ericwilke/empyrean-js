@@ -3,10 +3,10 @@ class Player {
     this.x
     this.y
     this.currentmap
-    this.str = getRandomInt(1,3)
-    this.dex = getRandomInt(1,3)
-    this.int = getRandomInt(1,3)
-    this.wis = getRandomInt(1,3)
+    this.str = getRandomInt(0,3)
+    this.dex = getRandomInt(0,3)
+    this.int = getRandomInt(0,3)
+    this.wis = getRandomInt(0,3)
     this.hp = 11 + Math.floor(Math.random()*6)
     this.magic = 12 + Math.floor(Math.random()*8)
     this.regenerate = 0
@@ -24,8 +24,8 @@ class Player {
     this.currentmap = mapname
   }
 
-  checkForPortal(y,x) {
-    let str = y+","+x
+  checkForPortal(x,y) {
+    let str = x+","+y
     //console.log("checking for portal at " + str)
     if(str in ACTIVE_MAP.portals) {
       return ACTIVE_MAP.portals[str]
@@ -124,6 +124,54 @@ class Player {
     } else {
         startMusic(blockedSound, false);
     }
+  }
+
+  async load() {
+    console.log("Attempting to player data")
+    try {
+      const response = await fetch("/data/player.json")
+      const data = await response.json()
+
+      this.x = data.x
+      this.y = data.y
+      this.currentmap = data.currentmap
+      this.str = data.str
+      this.dex = data.dex
+      this.int = data.int
+      this.wis = data.wis
+      this.hp = data.hp
+      this.magic = data.magic
+      this.regenerate = data.regenerate
+      this.max_hp = data.max_hp
+      this.max_magic = data.max_magic
+      this.hp_regen = data.hp_regen
+      this.magic_regen = data.magic_regen
+      this.weapon = data.weapon
+      this.armor = data.armor
+      this.spells = data.spells
+      this.inventory = data.inventory
+
+      console.log("[Player Class] successfully loaded player data")
+    } catch (err) {
+      console.log("no player file found")
+    }
+
+  }
+
+  async save() {
+    console.log("starting Player save")
+    const res = await fetch("/api/saveplayer", {
+      method: 'POST',
+      mode: 'same-origin',
+      cache: 'no-cache',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(this)
+    })
+    console.log("[Player Class] saved player successfully")
   }
 
 }

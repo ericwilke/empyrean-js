@@ -5,7 +5,7 @@ function draw() {
     screen_y = 0;
     for(y = PLAYER.y - MAP_TILE_OFFSET; y < PLAYER.y + MAP_TILE_OFFSET + 1; y++) {
       if(x >= 0 && y >=0 && x<MAP_WIDTH && y<MAP_HEIGHT && (isPointVisible(x,y,PLAYER.x,PLAYER.y)) ) {
-        let drawTile, drawGrass = null
+        let drawTile, drawGrass, drawWater = null
         switch(ACTIVE_MAP.tiles[y][x]) {
           case "grass":
             drawTile = tile_grass
@@ -97,9 +97,16 @@ function draw() {
           case "counter (horizontal)":
             drawTile = tile_counter_horizontal
             break;
+          case "boat":
+            drawTile = tile_boat
+            drawWater = true
+            break;
         }
       if (drawGrass) {
         ctx.drawImage(tile_grass, screen_x*90, screen_y*90);
+      }
+      if (drawWater) {
+        ctx.drawImage(tile_water_deep, screen_x*90, screen_y*90);
       }
       if (drawTile) {
         ctx.drawImage(drawTile, screen_x*90, screen_y*90);}
@@ -231,7 +238,7 @@ function draw() {
   }
 
   //ctx.fillText("Key press: " + KEY_PRESS, canvas.width/2 - 90, canvas.height/2 + 200);
-  ctx.fillText("Player X,Y: " + PLAYER.x + ", " + PLAYER.y, canvas.width/2 - 90, canvas.height/2 + 240);
+  //ctx.fillText("Player X,Y: " + PLAYER.x + ", " + PLAYER.y, canvas.width/2 - 90, canvas.height/2 + 240);
   if (MESSAGE != "") {
     ctx.font = "30px Arial";
     ctx.shadowOffsetX = 5;

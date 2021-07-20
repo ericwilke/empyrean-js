@@ -10,7 +10,8 @@ const epicThemeMusic = new Audio('sound/epic-theme.mp3');
 const medievalThemeMusic = new Audio('sound/medieval-music.mp3');
 const villageMusic = new Audio('sound/village.mp3');
 const dungeonMysticalMusic = new Audio('sound/dungeon-mystical.mp3');
-const dungeonDarkMusic = new Audio('sound/dungeon-dark.mp3');
+const dungeonDarkMusic = new Audio('sound/dungeon-dark.mp3')
+const gameOverMusic = new Audio('sound/game-over.mp3')
 
 // Sound Effects
 const blockedSound = new Audio('sound/blocked.mp3');
@@ -51,6 +52,7 @@ const tile_wood = new Image(); tile_wood.src = 'img/wood.png';
 const tile_portal = new Image(); tile_portal.src = 'img/portal.png';
 const tile_counter_horizontal = new Image(); tile_counter_horizontal.src = 'img/counter-horizontal.png';
 const tile_counter_vertical = new Image(); tile_counter_vertical.src = 'img/counter-vertical.png';
+const tile_boat = new Image(); tile_boat.src = 'img/boat.png';
 
 const tile_player = new Image(); tile_player.src = 'img/player.png';
 const tile_cursor = new Image(); tile_cursor.src = 'img/cursor.png';

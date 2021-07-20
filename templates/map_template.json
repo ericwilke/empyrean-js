@@ -6,6 +6,7 @@
   "playerStartY":0,
   "music":"village",
   "portals":{"19,0":"britania"},
+  "locked_doors": {"24,30": "skeleton key", "30,21": "Fardur skull key"},
   "npcs": {
     "Lord Stark": {
       "tile": "king",
@@ -21,7 +22,7 @@
       "greeting": ["Hello.", "I hear there is danger on the roads.", "Take care in your quest.", "Evil forces are in play."],
       "heal": "yes",
       "buy_sell": "no",
-      "give_item": {},
+      "give_item": [{"item":"ITEM", "msg": "Message text from NPC"}],
       "teach_spell": {"spell": "heal", "msg": "I will teach you the HEAL spell."},
       "addPortal":{}
     }

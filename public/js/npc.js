@@ -73,10 +73,50 @@ function talkToNpc(x, y, index) {
       let msg = Math.floor(Math.random() * ACTIVE_MAP.npcs[index].greeting.length)
       MESSAGE = ACTIVE_MAP.npcs[index].greeting[msg]
     }
+
+    // Heal player
     if (ACTIVE_MAP.npcs[index].heal == "yes" && (PLAYER.hp < PLAYER.max_hp + ITEM_EFFECTS["hp"])) {
       MESSAGE += "\nLet me heal your wounds..."
       startMusic(healSound, false)
       PLAYER.hp = PLAYER.max_hp + ITEM_EFFECTS["hp"]
+    }
+
+    // Give items to player
+    if (ACTIVE_MAP.npcs[index].give_item.length > 0) {
+      for (let i=0; i<ACTIVE_MAP.npcs[index].give_item.length; i++) {
+        // check to see if player is carrying too many items to take new item
+        if (PLAYER.inventory.length < MAX_INVENTORY_ITEMS) {
+          // check to see if item is already in inventory
+          // also check to see if item in in the player's armor or weapons
+          if (!PLAYER.inventory.includes(ACTIVE_MAP.npcs[index].give_item[i].item)) {
+            if ((PLAYER.weapon != ACTIVE_MAP.npcs[index].give_item[i].item) && (PLAYER.armor != ACTIVE_MAP.npcs[index].give_item[i].item)) {
+              PLAYER.inventory.push(ACTIVE_MAP.npcs[index].give_item[i].item)
+              MESSAGE += "\n" + ACTIVE_MAP.npcs[index].give_item[i].msg
+            }
+          }
+        } else {
+          // message that player is carrying too many items
+          MESSAGE += "\nYou cannot carry any more items..."
+        }
+      }
+    }
+
+    // Teach new spell to player
+    if (Object.keys(ACTIVE_MAP.npcs[index].teach_spell).length > 0) {
+      // Check to see if player already knows the spell
+      if (!PLAYER.spells.includes(ACTIVE_MAP.npcs[index].teach_spell["spell"])) {
+        // Check to see if player has too many spells
+        if (PLAYER.spells.length < MAX_SPELLS) {
+          PLAYER.spells.push(ACTIVE_MAP.npcs[index].teach_spell["spell"])
+          MESSAGE += "\n" + ACTIVE_MAP.npcs[index].teach_spell["msg"]
+        } else {
+          MESSAGE += "\nI would like to teach you the\nspell " + ACTIVE_MAP.npcs[index].teach_spell["spell"] + ", but you will\nneed to unlearn a spell first..."
+        }
+      }
+    }
+
+    if (ACTIVE_MAP.npcs[index].buy_sell == "yes") {
+      TRADE = true
     }
   }
 }
