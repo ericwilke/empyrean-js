@@ -18,16 +18,65 @@ function spawnMonster () {
     flag = ACTIVE_MAP.validTile(x,y)
   }
 
+  console.log("starting search for monster by frequency")
   flag = true
+  let choice = 0
   while (flag) {
-    const choice = getRandomInt(0, ACTIVE_MAP.spawntypes.length - 1)
-    const hp_stat = MONSTERS[ACTIVE_MAP.spawntypes[choice]].hp
-    const hp_range = hp_stat.split(":")
-    const hp = getRandomInt(parseInt(hp_range[0]), parseInt(hp_range[1]))
-    const newMonster = {"tile": ACTIVE_MAP.spawntypes[choice], "x": x, "y": y, "hp": hp}
-    ACTIVE_MAP.monsters.push(newMonster)
-    flag = false
+    let rarity = getRandomInt(1,100)
+    choice = getRandomInt(0, ACTIVE_MAP.spawntypes.length - 1)
+    if (rarity <= 60 && MONSTERS[ACTIVE_MAP.spawntypes[choice]].prevelance == "frequent") {
+      flag = false
+    }
+    if (rarity > 60 && rarity <= 90 && MONSTERS[ACTIVE_MAP.spawntypes[choice]].prevelance == "common") {
+      flag = false
+    }
+    if (rarity > 90 && rarity <= 99 && MONSTERS[ACTIVE_MAP.spawntypes[choice]].prevelance == "rare") {
+      flag = false
+    }
+    if (rarity == 100 && MONSTERS[ACTIVE_MAP.spawntypes[choice]].prevelance == "very rare") {
+      flag = false
+    }
   }
+  const hp_stat = MONSTERS[ACTIVE_MAP.spawntypes[choice]].hp
+  const hp_range = hp_stat.split(":")
+  const hp = getRandomInt(parseInt(hp_range[0]), parseInt(hp_range[1]))
+  const newMonster = {"tile": ACTIVE_MAP.spawntypes[choice], "x": x, "y": y, "hp": hp}
+  ACTIVE_MAP.monsters.push(newMonster)
+  console.log("spawning " + ACTIVE_MAP.spawntypes[choice])
+}
+
+function killMonster(index) {
+  if (ACTIVE_MAP.monsters[index].hp < 1) {
+    // monster killed!
+    MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " was killed!"
+    // add treasure:
+    // GOLD
+    treasureStr = MONSTERS[ACTIVE_MAP.monsters[index].tile].gold.split(":")
+    gold = getRandomInt(parseInt(treasureStr[0]), parseInt(treasureStr[1]))
+    PLAYER.gp += gold
+    MESSAGE += " Gained " + gold + " gold."
+
+    //SPECIAL_ITEMS -- add to player inventory
+    if (PLAYER.inventory.length < MAX_INVENTORY_ITEMS) {
+      PLAYER.inventory.push(MONSTERS[ACTIVE_MAP.monsters[index].tile].special_items)
+      MESSAGE += "\n Added " + MONSTERS[ACTIVE_MAP.monsters[index].tile].special_items + " to inventory."
+    }
+
+    // remove monster from array
+    ACTIVE_MAP.monsters.splice(index, 1)
+  }
+}
+
+function monsterDamageMod(index, dmgAmt, damageType) {
+  if ((MONSTERS[ACTIVE_MAP.monsters[index].tile].resists).includes(damageType)) {
+    dmgAmt = Math.floor(dmg/2)
+    MESSAGE += "\n" + ACTIVE_MAP.monsters[index].tile + " resisted " + damageType + "damage."
+  }
+  if ((MONSTERS[ACTIVE_MAP.monsters[index].tile].weakness).includes(damageType)) {
+    dmgAmt = dmgAmt * 2
+    MESSAGE += "\n" + ACTIVE_MAP.monsters[index].tile + " has a weakness to " + damageType + "damage."
+  }
+  return dmgAmt
 }
 
 function monsterMoveAndAttack () {
@@ -69,7 +118,7 @@ function monsterMoveAndAttack () {
           // attack
           MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " attacks!"
           let attackRoll = getRandomInt(1,20) + MONSTERS[ACTIVE_MAP.monsters[index].tile].attack.bonus
-          if (attackRoll >= ARMOR[PLAYER.armor].armor_class) {
+          if (attackRoll >= ARMOR[PLAYER.armor].armor_class + PLAYER.armor_bonus) {
             let damageTotal = 0
             let damage = 0
             const damageStats = MONSTERS[ACTIVE_MAP.monsters[index].tile].attack.damage.split("/")

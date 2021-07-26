@@ -17,4 +17,6 @@ canvas {
   font-family: serif;
   font: georgia;
   font-size: large;
+  vertical-align: top;
+  line-height: normal;
 }

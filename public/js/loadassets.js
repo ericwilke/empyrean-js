@@ -20,6 +20,8 @@ const bowSound = new Audio('sound/bow.mp3')
 const healSound = new Audio('sound/heal.mp3')
 const missSound = new Audio('sound/miss.mp3')
 const hitInCombatSound = new Audio('sound/hit_in_combat.mp3')
+const magicMissileSound = new Audio('sound/magic_missile.mp3')
+const holyLightSound = new Audio('sound/holy_light.mp3')
 
 // Images
 const tile_grass = new Image(); tile_grass.src = 'img/grass2.png';
@@ -53,6 +55,7 @@ const tile_portal = new Image(); tile_portal.src = 'img/portal.png';
 const tile_counter_horizontal = new Image(); tile_counter_horizontal.src = 'img/counter-horizontal.png';
 const tile_counter_vertical = new Image(); tile_counter_vertical.src = 'img/counter-vertical.png';
 const tile_boat = new Image(); tile_boat.src = 'img/boat.png';
+const tile_chest = new Image(); tile_chest.src = 'img/chest.png'
 
 const tile_player = new Image(); tile_player.src = 'img/player.png';
 const tile_cursor = new Image(); tile_cursor.src = 'img/cursor.png';
@@ -87,3 +90,4 @@ const tile_fire_elemental = new Image(); tile_fire_elemental.src = 'img/fire-ele
 const tile_fly = new Image(); tile_fly.src = 'img/fly.png';
 const tile_snake = new Image(); tile_snake.src = 'img/snake.png';
 const tile_dragon = new Image(); tile_dragon.src = 'img/dragon.png';
+const tile_cultist = new Image(); tile_cultist.src = 'img/cultist.png'

@@ -18,6 +18,9 @@ class Player {
     this.armor = "none"
     this.spells = []
     this.inventory = []
+    this.gp = getRandomInt(5,20)
+    this.armor_bonus = 0
+    this.attack_bonus = 0
   }
 
   setPlayerMap(mapname) {
@@ -150,6 +153,9 @@ class Player {
       this.armor = data.armor
       this.spells = data.spells
       this.inventory = data.inventory
+      this.gp = data.gp
+      this.armor_bonus = data.armor_bonus
+      this.attack_bonus = data.attack_bonus
 
       console.log("[Player Class] successfully loaded player data")
     } catch (err) {

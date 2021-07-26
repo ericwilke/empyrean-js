@@ -161,6 +161,9 @@ function draw() {
             case "nobel":
               drawTile = tile_nobel
               break
+            case "chest":
+              drawTile = tile_chest
+              break
           }
           ctx.drawImage(drawTile, (360 - (PLAYER.x - ACTIVE_MAP.npcs[index].x)*90), (360 - (PLAYER.y - ACTIVE_MAP.npcs[index].y)*90))
     }
@@ -224,6 +227,9 @@ function draw() {
               break
             case "fire elemental":
               drawTile = tile_fire_elemental
+              break
+            case "cultist":
+              drawTile = tile_cultist
               break
           }
           if (drawTile) {

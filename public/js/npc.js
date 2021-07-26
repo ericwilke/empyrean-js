@@ -86,12 +86,26 @@ function talkToNpc(x, y, index) {
       for (let i=0; i<ACTIVE_MAP.npcs[index].give_item.length; i++) {
         // check to see if player is carrying too many items to take new item
         if (PLAYER.inventory.length < MAX_INVENTORY_ITEMS) {
+          let itemToGive = ACTIVE_MAP.npcs[index].give_item[i].item
+          // strip the "*" modifier if present and set the keepItemWithNPC flag to true
+          let keepItemWithNPC = false
+          if (itemToGive.includes("*")) {
+            keepItemWithNPC = true
+            // strip the "*"
+            itemToGive = itemToGive.replace('*', '')
+          }
+
           // check to see if item is already in inventory
           // also check to see if item in in the player's armor or weapons
-          if (!PLAYER.inventory.includes(ACTIVE_MAP.npcs[index].give_item[i].item)) {
-            if ((PLAYER.weapon != ACTIVE_MAP.npcs[index].give_item[i].item) && (PLAYER.armor != ACTIVE_MAP.npcs[index].give_item[i].item)) {
-              PLAYER.inventory.push(ACTIVE_MAP.npcs[index].give_item[i].item)
+          if (!PLAYER.inventory.includes(itemToGive)) {
+            if ((PLAYER.weapon != itemToGive) && (PLAYER.armor != itemToGive)) {
+              PLAYER.inventory.push(itemToGive)
               MESSAGE += "\n" + ACTIVE_MAP.npcs[index].give_item[i].msg
+              if (!keepItemWithNPC) {
+                //remove the item from the NPC list of items
+                //will this mess up the for loop?
+                ACTIVE_MAP.npcs[index].give_item.splice(i,1)
+              }
             }
           }
         } else {

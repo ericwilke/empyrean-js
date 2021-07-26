@@ -1,1 +1,1 @@
-{"str":1,"dex":3,"int":0,"wis":2,"hp":16,"magic":14,"regenerate":5,"max_hp":16,"max_magic":14,"hp_regen":3,"magic_regen":3,"weapon":"dagger","armor":"none","spells":[],"inventory":[],"x":20,"y":9,"currentmap":"britania"}
+{"str":3,"dex":0,"int":3,"wis":1,"hp":11,"magic":17,"regenerate":37,"max_hp":11,"max_magic":17,"hp_regen":3,"magic_regen":3,"weapon":"dagger","armor":"leather armor","spells":["heal"],"inventory":["scroll of +1 dexterity","orc tusk","Mine of Hellis key","5 nails"],"gp":35,"armor_bonus":0,"attack_bonus":0,"x":19,"y":1,"currentmap":"britania"}
