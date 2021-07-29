@@ -33,6 +33,13 @@ app.post('/api/saveplayer', (req, res) => {
   console.log("Saved player data")
 })
 
+app.post('/api/savequests', (req, res) => {
+  console.log("POST request (quests save)")
+  const jsonString = req.body
+  saveJSON("/public/data/QUESTS.json", JSON.stringify(jsonString))
+  console.log("Saved quest data")
+})
+
 app.listen(port, () => console.log(`Express server started on port ${port}; ` + 'press Ctrl-C to terminate...'))
 
 function saveJSON(url, jsonString) {

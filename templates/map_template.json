@@ -24,7 +24,6 @@
       "buy_sell": "no",
       "give_item": [{"item":"ITEM", "msg": "Message text from NPC"}],
       "teach_spell": {"spell": "heal", "msg": "I will teach you the HEAL spell."},
-      "addPortal":{}
     }
   },
   "spawnfrequency":0,

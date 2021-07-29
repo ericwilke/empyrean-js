@@ -32,14 +32,17 @@ let MAP_WIDTH = 0;
 let MAP_HEIGHT = 0;
 let CURRENT_MUSIC = null;
 let CURRENT_THEME = null;
+let QUESTS = null
 
 let DEAD = false
 let TALK = false
 let COMBAT = false
 let CAST = false
 let TRADE = false
-let BUY = false
-let SELL = false
+let BUY_SELL_ACTIVE = false
+let NPC_TRADE_INDEX = null
+let BUY_SELL_CURSOR = 1
+let BUY_SELL_COLUMN = "left"
 let MANAGE_INVENTORY = false
 let MANAGE_INV_CURSOR = 1
 let ACTIVE_SPELL = ""
@@ -52,14 +55,14 @@ let CONSOLE = document.getElementById("console")
 let CONSOLE_TEXT
 let GAME_MAPS = []
 let MESSAGE = "Start your adventure!\nDanger awaits!";
-let ITEM_EFFECTS = {"int": 0, "str": 0, "dex":0, "armor": 0, "melee": 0, "range": 0, "hp": 0, "magic": 0}
+let ITEM_EFFECTS = {"int": 0, "wis": 0, "str": 0, "dex":0, "armor": 0, "hp": 0, "magic": 0}
 const THEMES = ["adventure (mellow)", "adventure (epic)", "adventure (dramtic)", "fantasy (epic)", "town", "village", "dungeon (mystical)", "dungeon (dark)", "tavern", "danger", "combat", "dungeon", "horror", "sewer"];
-const VISON_BLOCKING_TILES = ["mountains", "door", "wall (white square)", "wall (white rough)", "wall (gray)", "wall (brown rough)", "secret wall (white square)", "secret wall (brown rough)","door-locked"];
+const VISON_BLOCKING_TILES = ["mountains", "door", "wall (white square)", "wall (white rough)", "wall (gray)", "wall (brown rough)", "secret wall (white square)", "secret wall (brown rough)","door-locked","forest-pine", "forest-oak"];
 const MOVEMENT_BLOCKING_TILES = ["mountains", "wall (white square)", "wall (white rough)", "wall (gray)", "wall (brown rough)", "water (deep)", "door-locked", "counter (vertical)", "counter (horizontal)"];
 const DIFFICULT_TERRAIN = ["swamp", "water (shallow)", "desert", "forest-pine", "forest-oak", "forest-other"]
 
 const MAX_INVENTORY_ITEMS = 8
-const MAX_SPELLS = 4
+const MAX_SPELLS = 3
 
 ///////////////////////////////////////////////////////////
 
@@ -78,6 +81,31 @@ function getItemEffects() {
   for (item in PLAYER.inventory) {
     // check each player item and add the modifier to the ITEM_EFFECTS
     // look at the README.md before coding
+    const regexNumber = /\+\d+/
+    const regexTarget = /int|intelligence|str|strength|dex|dexterity|wis|wisdom|hp|health|magic|armor|protection/
+    const amt = PLAYER.inventory[MANAGE_INV_CURSOR-3].toLowerCase().match(regexNumber)
+    const tgt = PLAYER.inventory[MANAGE_INV_CURSOR-3].toLowerCase().match(regexTarget)
+    if (tgt == "int" | tgt == "intelligence") {
+      ITEM_EFFECTS.int += parseInt(amt)
+    }
+    if (tgt == "wis" | tgt == "wisdom") {
+      ITEM_EFFECTS.wis += parseInt(amt)
+    }
+    if (tgt == "str" | tgt == "strength") {
+      ITEM_EFFECTS.int += parseInt(amt)
+    }
+    if (tgt == "dex" | tgt == "dexterity") {
+      ITEM_EFFECTS.int += parseInt(amt)
+    }
+    if (tgt == "armor" | tgt == "protection") {
+      ITEM_EFFECTS.armor += parseInt(amt)
+    }
+    if (tgt == "hp" | tgt == "health") {
+      ITEM_EFFECTS.hp += parseInt(amt)
+    }
+    if (tgt == "magic") {
+      ITEM_EFFECTS.magic += parseInt(amt)
+    }
   }
 }
 
@@ -110,8 +138,43 @@ function spellMod() {
   }
 }
 
+function buySellDisplay() {
+  CONSOLE_TEXT = "<h1>++++ Buy / Sell ++++</h1><hr>"
+  CONSOLE_TEXT += "Gold: " + PLAYER.gp + "<br>"
+  CONSOLE_TEXT += "<table width='810'><tr><th>BUY</th><th>SELL</th></tr><tr><td style='padding: 15px; vertical-align: top; border: 1px solid black;'>"
+  for (i=0; i<ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.length;i++) {
+    if (BUY_SELL_COLUMN == "left" && BUY_SELL_CURSOR == i+1) {
+      CONSOLE_TEXT += "▶︎ "
+    }
+    CONSOLE_TEXT += ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems[i] + " (" + ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItemCosts[i] + " gp)<br>"
+  }
+  CONSOLE_TEXT += "</td><td style='padding: 15px; vertical-align: top; border: 1px solid black;'>"
+  for (i=0; i<PLAYER.inventory.length;i++) {
+    // need to calculate the price for different inventory (armor, weapon, item)
+    if (BUY_SELL_COLUMN == "right" && BUY_SELL_CURSOR == i+1) {
+      CONSOLE_TEXT += "▶︎ "
+    }
+    CONSOLE_TEXT += PLAYER.inventory[i] + " ("
+    if (PLAYER.inventory[i] in ITEMS) {
+      itemCostRange = ITEMS[PLAYER.inventory[i]].split(",")
+      CONSOLE_TEXT += Math.floor(itemCostRange[0]/2)
+    } else if (PLAYER.inventory[i] in WEAPONS) {
+        itemCostRange = WEAPONS[PLAYER.inventory[i]].cost.split(",")
+        CONSOLE_TEXT += Math.floor(itemCostRange[0]/2)
+    } else if (PLAYER.inventory[i] in ARMOR) {
+        itemCostRange = ARMOR[PLAYER.inventory[i]].cost.split(",")
+        CONSOLE_TEXT += Math.floor(itemCostRange[0]/2)
+    } else { CONSOLE_TEXT += "--" }
+    CONSOLE_TEXT += " gp)<br>"
+  }
+  CONSOLE_TEXT += "</td></tr></table>"
+  CONSOLE_TEXT += "<h3>[b]uy item / [p]eddle item / [q]uit</h3>"
+  document.getElementById("text_screen").innerHTML = CONSOLE_TEXT
+}
+
 function inventorySpellManagement() {
-  CONSOLE_TEXT = "<h1>++ Inventory / Spell Management ++</h1><hr>"
+  CONSOLE_TEXT = "<table width='810'><tr><td width='810'>"
+  CONSOLE_TEXT += "<h1>++ Inventory / Spell Management ++</h1><hr>"
   if (MANAGE_INV_CURSOR == 1) {
     CONSOLE_TEXT += "▶︎ "
   }
@@ -129,21 +192,43 @@ function inventorySpellManagement() {
   }
   CONSOLE_TEXT += "<hr><h3>Spells:</h3>"
   for (let i=0; i<PLAYER.spells.length; i++) {
-    if (MANAGE_INV_CURSOR == 3 + PLAYER.inventory.length) {
+    if (MANAGE_INV_CURSOR == 3 + PLAYER.inventory.length + i) {
       CONSOLE_TEXT += "▶︎ "
     }
     CONSOLE_TEXT += PLAYER.spells[i] + "<br>"
   }
   CONSOLE_TEXT += "<hr><h4>Use 'w' and 's' to select</h4>"
-  CONSOLE_TEXT += "<h4>[u]se item / [e]quip / [d]rop item / [f]orget spell / e[x]it</h4>"
+  CONSOLE_TEXT += "<h4>[u]se item / [e]quip / [d]rop item / [f]orget spell / [q]uit</h4>"
+  CONSOLE_TEXT += "</td></tr></table>"
   document.getElementById("text_screen").innerHTML = CONSOLE_TEXT
+}
+
+function statBlockDisplay() {
+  CONSOLE_TEXT = "<hr>"
+  if (PLAYER.hp < 5) {
+    CONSOLE_TEXT += "<span style='background-color:red; color:white;'> HP: " + PLAYER.hp + "</span>"
+  } else { CONSOLE_TEXT += "HP: " + PLAYER.hp }
+  CONSOLE_TEXT += " / MAGIC: " + (PLAYER.magic + ITEM_EFFECTS.magic)
+  CONSOLE_TEXT += "<br>STR: +" + (PLAYER.str + ITEM_EFFECTS.str) + " / DEX: +" + (PLAYER.dex + ITEM_EFFECTS.dex)
+  CONSOLE_TEXT += "<br>INT: +" + (PLAYER.int + ITEM_EFFECTS.int) + " / WIS: +" + (PLAYER.wis + ITEM_EFFECTS.wis)
+  CONSOLE_TEXT += "<br>Gold: " + PLAYER.gp
+  CONSOLE_TEXT += "<hr><h3>Weapon: " + PLAYER.weapon + " +" + WEAPONS[PLAYER.weapon].bonus + "</h3>"
+  CONSOLE_TEXT += "<hr><h3>Armor: " + PLAYER.armor + " +" + ITEM_EFFECTS.armor + "</h3>"
+  CONSOLE_TEXT += "<hr><h3>Inventory: (max " + MAX_INVENTORY_ITEMS + ")</h3>"
+  for (let i=0; i<PLAYER.inventory.length; i++) {
+    CONSOLE_TEXT += "[" + (i+1) + "] " + PLAYER.inventory[i] + "<br>"
+  }
+  CONSOLE_TEXT += "<br><hr><h3>Spells: (max " + MAX_SPELLS + ")</h3>"
+  for (let i=0; i<PLAYER.spells.length; i++) {
+    CONSOLE_TEXT += "[" + (i+1) + "] " + PLAYER.spells[i] + "<br>"
+  }
+  CONSOLE.innerHTML = CONSOLE_TEXT
 }
 
 function splashScreen() {
   console.log("splashScreen()");
 
-  //startButton = document.getElementById("startButton");
-  //startButton.remove();
+  statBlockDisplay()
 
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -239,13 +324,13 @@ async function gameLoop() {
                 if (attackRoll == 20) { crit = true }
                 switch (WEAPONS[PLAYER.weapon].type) {
                   case "melee":
-                    attackRoll += PLAYER.str
+                    attackRoll += PLAYER.str + ITEM_EFFECTS.str
                     break
                   case "range":
-                    attackRoll += PLAYER.dex
+                    attackRoll += PLAYER.dex + ITEM_EFFECTS.dex
                     break
                 }
-                attackRoll += WEAPONS[PLAYER.weapon].bonus + PLAYER.attack_bonus
+                attackRoll += WEAPONS[PLAYER.weapon].bonus
                 if (attackRoll >= MONSTERS[ACTIVE_MAP.monsters[index].tile].armor_class) {
                   // Hit!!
                   if (WEAPONS[PLAYER.weapon].type == "range") {startMusic(bowSound, false)}
@@ -507,7 +592,7 @@ async function gameLoop() {
             i = 0
             for (let index in ACTIVE_MAP.monsters) {
               if (distance(PLAYER.x, PLAYER.y, ACTIVE_MAP.monsters[index].x, ACTIVE_MAP.monsters[index].y) <= SPELLS[ACTIVE_SPELL].range && i < SPELLS[ACTIVE_SPELL].targets) {
-                //effect = getRandomInt(1, parseInt(SPELLS[ACTIVE_SPELL].damageAmount))
+                effect = getRandomInt(1, parseInt(SPELLS[ACTIVE_SPELL].damageAmount))
                 effect += spellMod()
                 effect = monsterDamageMod(index, effect, SPELLS[ACTIVE_SPELL].damageType)
                 ACTIVE_MAP.monsters[index].hp -= effect
@@ -521,33 +606,120 @@ async function gameLoop() {
             CAST = false
             ACTIVE_SPELL = ""
             break
+          // ADD MORE SPELLS HERE!!!
         }
       }
 
     } else if (TRADE) {
+        buySellDisplay()
+        if (!BUY_SELL_ACTIVE) {
+          MESSAGE = "\nWould you like to buy or sell something? (y)es (n)o"
+        }
         switch(KEY_PRESS) {
-          case "b":
+          case "n":
             // start the buy dialog
-            MESSAGE += "What would you like to buy?"
-            BUY = true
+            if (!BUY_SELL_ACTIVE) {
+              TRADE = false
+            }
             break;
-          case "s":
+          case "y":
             // start the sell dialog
-            MESSAGE += "What would you like to sell?"
-            SELL = true
+            BUY_SELL_ACTIVE = true
+            document.getElementById("main_screen").style.display = "none"
+            document.getElementById("console").style.display = "none"
+            document.getElementById("text_screen").style.display = "inline"
             break;
+          case "w":
+            if (BUY_SELL_ACTIVE) {
+              BUY_SELL_CURSOR--
+              if (BUY_SELL_CURSOR < 1) { BUY_SELL_CURSOR = 1 }
+            }
+            break
+          case "s":
+            if (BUY_SELL_ACTIVE) {
+              BUY_SELL_CURSOR++
+              if (BUY_SELL_COLUMN == "left") {
+                if (BUY_SELL_CURSOR > ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.length) {
+                  BUY_SELL_CURSOR = ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.length
+                }
+              }
+              if (BUY_SELL_COLUMN == "right") {
+                if (BUY_SELL_CURSOR > PLAYER.inventory.length) {
+                  BUY_SELL_CURSOR = PLAYER.inventory.length
+                }
+              }
+            }
+            break
+          case "d":
+            if (BUY_SELL_ACTIVE) {
+              if (PLAYER.inventory.length > 0 && BUY_SELL_COLUMN == "left") {
+                BUY_SELL_COLUMN = "right"
+                BUY_SELL_CURSOR = 1
+              }
+            }
+            break
+          case "a":
+            if (BUY_SELL_ACTIVE) {
+              if (ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.length > 0 && BUY_SELL_COLUMN == "right") {
+                BUY_SELL_COLUMN = "left"
+                BUY_SELL_CURSOR = 1
+              }
+            }
+            break
+          case "p": // peddle item
+            if (BUY_SELL_ACTIVE && BUY_SELL_COLUMN == "right") {
+              if (PLAYER.inventory[BUY_SELL_CURSOR-1] in ITEMS) {
+                itemCostRange = ITEMS[PLAYER.inventory[BUY_SELL_CURSOR-1]].split(",")
+                cost = Math.floor(itemCostRange[0]/2)
+                PLAYER.gp += cost
+                ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.push(PLAYER.inventory[BUY_SELL_CURSOR-1])
+                cost = getRandomInt(itemCostRange[0], itemCostRange[1])
+                ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItemCosts.push(cost)
+                PLAYER.inventory.splice(BUY_SELL_CURSOR-1,1)
+              } else if (PLAYER.inventory[BUY_SELL_CURSOR-1] in ARMOR) {
+                  itemCostRange = ARMOR[PLAYER.inventory[BUY_SELL_CURSOR-1]].cost.split(",")
+                  cost = Math.floor(itemCostRange[0]/2)
+                  PLAYER.gp += cost
+                  ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.push(PLAYER.inventory[BUY_SELL_CURSOR-1])
+                  cost = getRandomInt(itemCostRange[0], itemCostRange[1])
+                  ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItemCosts.push(cost)
+                  PLAYER.inventory.splice(BUY_SELL_CURSOR-1,1)
+              } else if (PLAYER.inventory[BUY_SELL_CURSOR-1] in WEAPONS) {
+                  itemCostRange = WEAPONS[PLAYER.inventory[BUY_SELL_CURSOR-1]].cost.split(",")
+                  cost = Math.floor(itemCostRange[0]/2)
+                  PLAYER.gp += cost
+                  ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.push(PLAYER.inventory[BUY_SELL_CURSOR-1])
+                  cost = getRandomInt(itemCostRange[0], itemCostRange[1])
+                  ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItemCosts.push(cost)
+                  PLAYER.inventory.splice(BUY_SELL_CURSOR-1,1)
+              }
+            }
+            break
+          case "b": // buy item
+            if (BUY_SELL_ACTIVE && BUY_SELL_COLUMN == "left") {
+              if (ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItemCosts[BUY_SELL_CURSOR-1] > PLAYER.gp) {
+                alert("You do not have enough gold to purchase that item.")
+              } else {
+                PLAYER.gp -= ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItemCosts[BUY_SELL_CURSOR-1]
+                PLAYER.inventory.push(ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems[BUY_SELL_CURSOR-1])
+                ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItems.splice(BUY_SELL_CURSOR-1,1)
+                ACTIVE_MAP.npcs[NPC_TRADE_INDEX].shopItemCosts.splice(BUY_SELL_CURSOR-1,1)
+              }
+            }
+            break
           case "q":
+            document.getElementById("main_screen").style.display = "inline"
+            document.getElementById("console").style.display = "inline"
+            document.getElementById("text_screen").style.display = "none"
             TRADE = false
-            BUY = false
-            SELL = false
+            BUY_SELL_ACTIVE = false
             break;
-          default:
-            MESSAGE = "\nWould you like to (b)uy or (s)ell something? (q)uit"
-          }
+          } // end switch statement
+          buySellDisplay()
       } else if (MANAGE_INVENTORY) {
           inventorySpellManagement()
           switch(KEY_PRESS) {
-            case "x":
+            case "q":
               // exit Manage Inventory System
               MANAGE_INVENTORY = false
               document.getElementById("main_screen").style.display = "inline"
@@ -624,7 +796,7 @@ async function gameLoop() {
             case "u":
               //use an item
               const regexNumber = /\+\d+/
-              const regexTarget = /int|intelligence|str|strength|dex|dexterity|wis|wisdom|hp|health|healing|magic|attack|protection/
+              const regexTarget = /int|intelligence|str|strength|dex|dexterity|wis|wisdom|hp|health|healing|magic/
               const amt = PLAYER.inventory[MANAGE_INV_CURSOR-3].toLowerCase().match(regexNumber)
               const tgt = PLAYER.inventory[MANAGE_INV_CURSOR-3].toLowerCase().match(regexTarget)
               if (PLAYER.inventory[MANAGE_INV_CURSOR-3].toLowerCase().includes("potion")) {
@@ -642,31 +814,42 @@ async function gameLoop() {
                 MANAGE_INV_CURSOR = 1
               } else if (PLAYER.inventory[MANAGE_INV_CURSOR-3].toLowerCase().includes("scroll")) {
                   //parse and find effect of scroll
-                  if (tgt == "magic") {
-                    PLAYER.max_magic += parseInt(amt)
-                    PLAYER.magic = PLAYER.max_magic + ITEM_EFFECTS["magic"]
+                  let learnSpellScroll = false
+                  for (const spell in SPELLS) {
+                    //teach player the spell from the scroll
+                    if (PLAYER.inventory[MANAGE_INV_CURSOR-3].toLowerCase().includes(spell)) {
+                      // check to see if the spell name is in the scroll
+                      learnSpellScroll = true
+                      if (!PLAYER.spells.includes(spell)) {
+                        // player does not alreay know the spell
+                        if (PLAYER.spells.length < MAX_SPELLS) {
+                          PLAYER.spells.push(spell)
+                          MESSAGE += "\nYou now know the " + spell + " spell"
+                        } else { MESSAGE += "\nYou cannot learn another spell."}
+                      }
+                    }
                   }
-                  if (tgt == "hp" | tgt == "health") {
-                    PLAYER.max_hp += parseInt(amt)
-                    PLAYER.hp = PLAYER.max_hp + ITEM_EFFECTS["hp"]
-                  }
-                  if (tgt == "str" | tgt == "strength") {
-                    PLAYER.str += parseInt(amt)
-                  }
-                  if (tgt == "int" | tgt == "intelligence") {
-                    PLAYER.int += parseInt(amt)
-                  }
-                  if (tgt == "dex" | tgt == "dexterity") {
-                    PLAYER.dex += parseInt(amt)
-                  }
-                  if (tgt == "wis" | tgt == "wisdom") {
-                    PLAYER.wis += parseInt(amt)
-                  }
-                  if (tgt == "attack") {
-                    PLAYER.attack_bonus += parseInt(amt)
-                  }
-                  if (tgt == "protection") {
-                    PLAYER.armor_bonus += parseInt(amt)
+                  if (!learnSpellScroll) {
+                    if (tgt == "magic") {
+                      PLAYER.max_magic += parseInt(amt)
+                      PLAYER.magic = PLAYER.max_magic + ITEM_EFFECTS["magic"]
+                    }
+                    if (tgt == "hp" | tgt == "health") {
+                      PLAYER.max_hp += parseInt(amt)
+                      PLAYER.hp = PLAYER.max_hp + ITEM_EFFECTS["hp"]
+                    }
+                    if (tgt == "str" | tgt == "strength") {
+                      PLAYER.str += parseInt(amt)
+                    }
+                    if (tgt == "int" | tgt == "intelligence") {
+                      PLAYER.int += parseInt(amt)
+                    }
+                    if (tgt == "dex" | tgt == "dexterity") {
+                      PLAYER.dex += parseInt(amt)
+                    }
+                    if (tgt == "wis" | tgt == "wisdom") {
+                      PLAYER.wis += parseInt(amt)
+                    }
                   }
                   console.log("using scroll... " + amt + " " + tgt)
                   PLAYER.inventory.splice(MANAGE_INV_CURSOR -3, 1)
@@ -720,9 +903,10 @@ async function gameLoop() {
           console.log("need to save map...")
           ACTIVE_MAP.saveMap()
           console.log("map saved")
-          console.log("need to save player....")
           PLAYER.save()
           console.log("player saved")
+          saveQuests()
+          console.log("quests saved")
           break;
         case "i":
           MANAGE_INVENTORY = true
@@ -731,6 +915,26 @@ async function gameLoop() {
           document.getElementById("main_screen").style.display = "none"
           document.getElementById("text_screen").style.display = "inline"
           break
+        case "q":
+          if (document.getElementById("main_screen").style.display == "inline") {
+            document.getElementById("main_screen").style.display = "none"
+            document.getElementById("text_screen").style.display = "inline"
+          } else {
+              document.getElementById("main_screen").style.display = "inline"
+              document.getElementById("text_screen").style.display = "none"
+          }
+          CONSOLE_TEXT = "<table width='810'><tr><td><h2>QUESTS:</h2>"
+          for (quest in QUESTS) {
+            if (QUESTS[quest].status == "active") {
+              CONSOLE_TEXT += "<h3>Active quest: " + quest + "</h3>"
+              CONSOLE_TEXT += QUESTS[quest].start_message + "<hr>"
+            } else if (QUESTS[quest].status == "completed") {
+                CONSOLE_TEXT += "<h3>Completed quest: " + quest + "</h3><hr>"
+                //CONSOLE_TEXT += QUESTS[quest].start_message + "<hr>"
+            }
+          }
+          CONSOLE_TEXT += "</td></tr></table>"
+          document.getElementById("text_screen").innerHTML = CONSOLE_TEXT
         }
     }
 
@@ -762,25 +966,7 @@ async function gameLoop() {
     }
   }
 
-  CONSOLE_TEXT = "<h2>Stats</h2><hr>"
-  if (PLAYER.hp < 5) {
-    CONSOLE_TEXT += "<span style='background-color:red; color:white;'> HP: " + PLAYER.hp + "</span>"
-  } else { CONSOLE_TEXT += "HP: " + PLAYER.hp }
-  CONSOLE_TEXT += " / MAGIC: " + PLAYER.magic
-  CONSOLE_TEXT += "<br>STR: +" + PLAYER.str + " / DEX: +" + PLAYER.dex
-  CONSOLE_TEXT += "<br>INT: +" + PLAYER.int + " / WIS: +" + PLAYER.wis
-  CONSOLE_TEXT += "<br>Gold: " + PLAYER.gp
-  CONSOLE_TEXT += "<hr><h3>Weapon: " + PLAYER.weapon + "</h3>"
-  CONSOLE_TEXT += "<hr><h3>Armor: " + PLAYER.armor + "</h3>"
-  CONSOLE_TEXT += "<hr><h3>Inventory:</h3>"
-  for (let i=0; i<PLAYER.inventory.length; i++) {
-    CONSOLE_TEXT += "[" + (i+1) + "] " + PLAYER.inventory[i] + "<br>"
-  }
-  CONSOLE_TEXT += "<br><hr><h3>Spells:</h3>"
-  for (let i=0; i<PLAYER.spells.length; i++) {
-    CONSOLE_TEXT += "[" + (i+1) + "] " + PLAYER.spells[i] + "<br>"
-  }
-  CONSOLE.innerHTML = CONSOLE_TEXT
+  statBlockDisplay()
 
   draw();
   KEY_PRESS = null;
@@ -799,6 +985,7 @@ async function loadNewMap(name) {
 function activateMap(name) {
   console.log("=== activateMap: START ===");
   PLAYER.save()
+  saveQuests()
   for(let i=0; i<GAME_MAPS.length; i++) {
     console.log("GAME_MAPS.name = " + GAME_MAPS[i].name);
     console.log("name to match = " + name);
@@ -817,6 +1004,35 @@ function activateMap(name) {
     }
   }
   console.log("=== activateMap: END ===");
+}
+
+async function loadQuests() {
+  console.log("=== loadQuests: START ===")
+  try {
+    const response = await fetch("/data/quests.json")
+    QUESTS = await response.json()
+  }
+  catch(e) {
+    MESSAGE += "\nCould not load quests.json file.\nCheck it for illegal escape chars."
+    console.log(e)
+  }
+  console.log("=== loadQuests: END ===")
+}
+
+async function saveQuests() {
+  console.log("starting quest save")
+  const res = await fetch("/api/savequests", {
+    method: 'POST',
+    mode: 'same-origin',
+    cache: 'no-cache',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(QUESTS)
+  })
+  console.log("saved quests successfully")
 }
 
 async function loadConfig() {
@@ -839,6 +1055,8 @@ async function loadConfig() {
 function init() {
   // check for player file, if none, use the newly created player
   PLAYER = new Player()
+
+  loadQuests()
 
   PLAYER.load().
     then(res => {

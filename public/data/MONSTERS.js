@@ -161,7 +161,7 @@ MONSTERS = {
         "gold": "50:200",
         "level": 13,
         "xp": 9000,
-        "special_items": "",
+        "special_items": "beholder eye",
         "movement": "random"
     },
     "cultist": {

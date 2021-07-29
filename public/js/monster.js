@@ -57,9 +57,16 @@ function killMonster(index) {
     MESSAGE += " Gained " + gold + " gold."
 
     //SPECIAL_ITEMS -- add to player inventory
-    if (PLAYER.inventory.length < MAX_INVENTORY_ITEMS) {
+    if (PLAYER.inventory.length < MAX_INVENTORY_ITEMS && MONSTERS[ACTIVE_MAP.monsters[index].tile].special_items != "") {
       PLAYER.inventory.push(MONSTERS[ACTIVE_MAP.monsters[index].tile].special_items)
       MESSAGE += "\n Added " + MONSTERS[ACTIVE_MAP.monsters[index].tile].special_items + " to inventory."
+    }
+
+    // check to see if monster is a kill targer for an active quest
+    for (quest in QUESTS) {
+      if (QUESTS[quest].status == "active" && QUESTS[quest].quest_type == "kill" && QUESTS[quest].kill_target == ACTIVE_MAP.monsters[index].tile) {
+        QUESTS[quest].kill_current_count++
+      }
     }
 
     // remove monster from array
@@ -118,7 +125,7 @@ function monsterMoveAndAttack () {
           // attack
           MESSAGE += "\nThe " + ACTIVE_MAP.monsters[index].tile + " attacks!"
           let attackRoll = getRandomInt(1,20) + MONSTERS[ACTIVE_MAP.monsters[index].tile].attack.bonus
-          if (attackRoll >= ARMOR[PLAYER.armor].armor_class + PLAYER.armor_bonus) {
+          if (attackRoll >= ARMOR[PLAYER.armor].armor_class + ITEM_EFFECTS.armor) {
             let damageTotal = 0
             let damage = 0
             const damageStats = MONSTERS[ACTIVE_MAP.monsters[index].tile].attack.damage.split("/")

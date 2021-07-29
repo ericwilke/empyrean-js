@@ -20,3 +20,7 @@ canvas {
   vertical-align: top;
   line-height: normal;
 }
+
+.screen {
+  width: 810px;
+}
