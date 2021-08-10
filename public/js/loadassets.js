@@ -60,6 +60,7 @@ const tile_chest = new Image(); tile_chest.src = 'img/chest.png'
 const tile_player = new Image(); tile_player.src = 'img/player.png';
 const tile_cursor = new Image(); tile_cursor.src = 'img/cursor.png';
 const tile_king = new Image(); tile_king.src = 'img/king.png';
+const tile_queen = new Image(); tile_queen.src = 'img/queen.png'
 const tile_castle_guard = new Image(); tile_castle_guard.src = 'img/castle-guard.png';
 const tile_old_man = new Image(); tile_old_man.src = 'img/old-man.png';
 const tile_commoner_1 = new Image(); tile_commoner_1.src = 'img/commoner1.png';
@@ -70,7 +71,11 @@ const tile_commoner_5 = new Image(); tile_commoner_5.src = 'img/commoner5.png';
 const tile_nobel = new Image(); tile_nobel.src = 'img/nobel.png';
 const tile_sailor = new Image(); tile_sailor.src = 'img/sailor.png';
 const tile_pirate = new Image(); tile_pirate.src = 'img/pirate.png';
-const tile_ranger = new Image(); tile_ranger.src = 'img/ranger.png';
+const tile_ranger = new Image(); tile_ranger.src = 'img/ranger.png'
+const tile_traveling_merchant = new Image(); tile_traveling_merchant.src = 'img/traveling-merchant.png'
+const tile_dwarf = new Image(); tile_dwarf.src = 'img/dwarf.png'
+const tile_cook = new Image(); tile_cook.src = 'img/cook.png'
+const tile_blacksmith = new Image(); tile_blacksmith.src = 'img/blacksmith.png'
 
 const tile_beholder = new Image(); tile_beholder.src = 'img/beholder.png';
 const tile_goblin = new Image(); tile_goblin.src = 'img/goblin.png';
@@ -89,5 +94,10 @@ const tile_wyvern = new Image(); tile_wyvern.src = 'img/wyvern.png';
 const tile_fire_elemental = new Image(); tile_fire_elemental.src = 'img/fire-elemental.png';
 const tile_fly = new Image(); tile_fly.src = 'img/fly.png';
 const tile_snake = new Image(); tile_snake.src = 'img/snake.png';
-const tile_dragon = new Image(); tile_dragon.src = 'img/dragon.png';
+const tile_dragon = new Image(); tile_dragon.src = 'img/dragon.png'
 const tile_cultist = new Image(); tile_cultist.src = 'img/cultist.png'
+const tile_cult_leader = new Image(); tile_cult_leader.src = 'img/cult-leader.png'
+const tile_hag = new Image(); tile_hag.src = 'img/hag.png'
+const tile_bandit = new Image(); tile_bandit.src = 'img/bandit.png'
+const tile_owlbear = new Image(); tile_owlbear.src = 'img/owlbear.png'
+const tile_gelatinouscube = new Image(); tile_gelatinouscube.src = 'img/gelatinouscube.png'

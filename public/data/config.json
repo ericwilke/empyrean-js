@@ -1,4 +1,4 @@
 {
-  "gamemaps": ["britania", "castlebritania", "castlebritaniadungeon", "carraige", "fardurruins", "eastport", "mineofhellis"],
+  "gamemaps": ["britania", "castlebritania", "castlebritaniadungeon", "carraige", "fardurruins", "eastport", "mineofhellis","kirgaard","castle_brackhill","elderwatch"],
   "startingmap": "britania"
 }

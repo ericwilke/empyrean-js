@@ -6,5 +6,6 @@ WEAPONS = {
     "great sword": {"range": 1, "damage": "slashing-18", "type": "melee", "bonus": 0, "cost": "500,600"},
     "short bow": {"range": 4, "damage": "piercing-4", "type": "range", "bonus": 0, "cost": "50,60"},
     "long bow": {"range": 4, "damage": "piercing-8", "type": "range", "bonus": 0, "cost": "100,120"},
-    "flaming short sword": {"range": 1, "damage": "slashing-6/fire-4", "type": "melee", "bonus": 1, "cost": "600,750"}
+    "flaming short sword": {"range": 1, "damage": "slashing-6/fire-4", "type": "melee", "bonus": 1, "cost": "600,750"},
+    "sword of destruction": {"range": 1, "damage": "slashing-12/force-6", "type": "melee", "bonus": 2, "cost": "1000,1750"}
 }

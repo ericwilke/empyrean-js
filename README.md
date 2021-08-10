@@ -26,7 +26,51 @@ Examples: `golden amulet (+2 armor)`, `silver ring (+1 range)`, `potion of heali
 
 ### NPCs
 
-If an NPC has a quest item to give to the player, include an `*` within the name of the quest item. The `*` will be removed in the player inventory list but tells the program to keep the item in the list of items with the NPC. Example: `*Mine of Hellis key`.
+**tile** is the tile that will be displayed for the NPC (see the `loadassests.js` file for a list of tiles).
+
+**x** and **y** are the starting `x` and `y` position of the NPC on the map.
+
+**Movement** of an NPC can be set to `random`, `static`, `pace-x`, or `pace-y`. Additionally, constraints on the X and Y limits can be set using:
+
+  - constrain_low_x
+  - constrain_high_x
+  - constrain_low_y
+  - constrain_high_y
+
+For pacing movements, the `x-direction` or `y-direction` can be set to `+1` or '-1' for movement direction.
+
+**greeting** is an array that will show a random greeting each time the player talks to the NPC.
+
+**heal** can be set to `yes` or `no` to indicate if the NPC will heal the player.
+
+**buy_sell** can be set to `yes` or `no` to indicate if the NPC can sell and buy items to and with the player.
+
+**give_item** is an array of item(s) that will be given to the player. If an NPC has a quest item to give to the player, include an `*` within the name of the quest item. The `*` will be removed in the player inventory list but tells the program to keep the item in the list of items with the NPC. Example: `*Mine of Hellis key`.
+
+**teach_spell** is a key-value pair that states the `spell` and the `msg` told the the player. For example:
+
+    {"spell":"heal","msg":"I will teach you the HEAL spell."}
+
+An example of a complete NPC json object is:
+
+    { "Lord Stark": {
+        "tile": "king",
+        "x": 15,
+        "y": 9,
+        "movement": "static",
+        "x_direction": 0,
+        "y_direction": 0,
+        "constrain_low_x": 0,
+        "constrain_high_x": 0,
+        "constrain_low_y": 0,
+        "constrain_high_y": 0,
+        "greeting": ["Hello.","I hear there is danger on the roads.","Take care in your quest.","Evil forces are in play."],
+        "heal": "yes",
+        "buy_sell": "no",
+        "give_item": [],
+        "teach_spell": {"spell":"heal","msg":"I will teach you the HEAL spell."}
+      }
+    }
 
 ### Quests
 

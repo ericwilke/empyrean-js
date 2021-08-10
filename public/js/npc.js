@@ -36,7 +36,7 @@ function moveNpc() {
         if (new_x < ACTIVE_MAP.npcs[index].constrain_low_x) { new_x = ACTIVE_MAP.npcs[index].constrain_low_x }
         if (new_x > ACTIVE_MAP.npcs[index].constrain_high_x) { new_x = ACTIVE_MAP.npcs[index].constrain_high_x }
         if (new_y < ACTIVE_MAP.npcs[index].constrain_low_y) { new_y = ACTIVE_MAP.npcs[index].constrain_low_y }
-        if (new_y < ACTIVE_MAP.npcs[index].constrain_high_y) { new_y = ACTIVE_MAP.npcs[index].constrain_high_y }
+        if (new_y > ACTIVE_MAP.npcs[index].constrain_high_y) { new_y = ACTIVE_MAP.npcs[index].constrain_high_y }
         if (ACTIVE_MAP.validTile(new_x, new_y)) {
           ACTIVE_MAP.npcs[index].x = new_x
           ACTIVE_MAP.npcs[index].y = new_y

@@ -134,11 +134,17 @@ function draw() {
             case "king":
               drawTile = tile_king
               break
+            case "queen":
+              drawTile = tile_queen
+              break
             case "castle guard":
               drawTile = tile_castle_guard
               break
             case "old man":
               drawTile = tile_old_man
+              break
+            case "cook":
+              drawTile = tile_cook
               break
             case "commoner 1":
               drawTile = tile_commoner_1
@@ -163,6 +169,27 @@ function draw() {
               break
             case "chest":
               drawTile = tile_chest
+              break
+            case "traveling merchant":
+              drawTile = tile_traveling_merchant
+              break
+            case "dwarf":
+              drawTile = tile_dwarf
+              break
+            case "ranger":
+              drawTile = tile_ranger
+              break
+            case "sailor":
+              drawTile = tile_sailor
+              break
+            case "pirate":
+              drawTile = tile_pirate
+              break
+            case "monk":
+              drawTile = tile_monk
+              break
+            case "blacksmith":
+              drawTile = tile_blacksmith
               break
           }
           ctx.drawImage(drawTile, (360 - (PLAYER.x - ACTIVE_MAP.npcs[index].x)*90), (360 - (PLAYER.y - ACTIVE_MAP.npcs[index].y)*90))
@@ -207,13 +234,16 @@ function draw() {
             case "orc":
               drawTile = tile_orc
               break
-            case "spider":
+            case "giant spider":
               drawTile = tile_spider
               break
             case "troll":
               drawTile = tile_troll
               break
             case "wyvern":
+              drawTile = tile_wyvern
+              break
+            case "wyvern guard":
               drawTile = tile_wyvern
               break
             case "goblin":
@@ -230,6 +260,39 @@ function draw() {
               break
             case "cultist":
               drawTile = tile_cultist
+              break
+            case "cult leader":
+              drawTile = tile_cult_leader
+              break
+            case "troll":
+              drawTile = tile_troll
+              break
+            case "troll guard":
+              drawTile = tile_troll
+              break
+            case "giant fly":
+              drawTile = tile_fly
+              break
+            case "hag":
+              drawTile = tile_hag
+              break
+            case "bandit":
+              drawTile = tile_bandit
+              break
+            case "dwarf":
+              drawTile = tile_dwarf
+              break
+            case "pirate":
+              drawTile = tile_pirate
+              break
+            case "owlbear":
+              drawTile = tile_owlbear
+              break
+            case "monk":
+              drawTile = tile_monk
+              break
+            case "gelatinous cube":
+              drawTile = tile_gelatinouscube
               break
           }
           if (drawTile) {

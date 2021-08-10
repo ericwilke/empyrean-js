@@ -4,14 +4,6 @@
 //
 // A Javascript browser game in the vain of Ultima.
 
-// To Do:
-// - scolls with a spell name can teach player the spell
-// - add monsters giving items to players when killed
-// - complete attribute modifications based on items
-// - buying and selling
-// - map modifications based on NPCs and quests
-// - questing system
-
 console.log("=== START SCRIPT ===");
 
 // Set up canvas DOM element.
@@ -555,6 +547,7 @@ async function gameLoop() {
             ACTIVE_SPELL = ""
             CAST = false
             break
+            
           case "magic missile":
             effect = 0
             for (let index in ACTIVE_MAP.monsters) {
@@ -588,6 +581,7 @@ async function gameLoop() {
               CAST = false
             }
             break
+
           case "holy light":
             i = 0
             for (let index in ACTIVE_MAP.monsters) {
@@ -605,6 +599,14 @@ async function gameLoop() {
             PLAYER.magic -= SPELLS[ACTIVE_SPELL].cost
             CAST = false
             ACTIVE_SPELL = ""
+            break
+
+          case "lightning chain":
+            //detail spell
+            break
+
+          case "ice knife":
+            //detail spell
             break
           // ADD MORE SPELLS HERE!!!
         }

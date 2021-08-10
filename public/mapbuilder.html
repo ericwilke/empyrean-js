@@ -1,0 +1,71 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>EMPYREAN MAP BUILDER</title>
+  <meta name="author" content="Eric Wilke">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="text/javascript" src="js/loadassets.js"></script>
+</head>
+
+<body onload="init()">
+  <table>
+    <tr>
+      <td style="vertical-align: top; border: 1px solid black;">
+        <canvas id="main_screen" width="0" heigh="0"></canvas>
+        <div id="text_screen" style="display: none; width: 810px" class="screen">
+            <h2>JSON Output</h2>
+        </div>
+      </td>
+      <td style="vertical-align: top">
+        <div id="console" class="console">
+          <h4>Movement</h4>
+          w = up<br>
+          s = down<br>
+          a = left<br>
+          d = right<br>
+          <hr>
+          SPACE = view data as JSON
+          <h4>Tile</h4>
+          . = grass<br>
+          t = forest (pine)<br>
+          T = forest (oak)<br>
+          y = forest (other)<br>
+          + = road (dirt)<br>
+          = = road (stone)<br>
+          m = mountains<br>
+          - = desert<br>
+          z = swamp<br>
+          o = cave<br>
+          r = water (shallow)<br>
+          R = water (deep)<br>
+          j = wall (gray)<br>
+          J = wall (gray) - secret<br>
+          l = wall (brown rough)<br>
+          L = wall (brown rough) - secret<br>
+          k = wall (white square)<br>
+          K = wall (white square) - secret<br>
+          n = wall (white rough)<br>
+          N = wall (white rough) - secret<br>
+          b = door<br>
+          B = door (locked)<br>
+          i = stairs<br>
+          u = sign<br>
+          [ = town<br>
+          ] = castle<br>
+          { = ruins<br>
+          @ = portal<br>
+          ^ = boat<br>
+          # = wood<br>
+          | = counter (vertical)<br>
+          _ = counter (horizontal)<br>
+        </div>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+<script src="js/mapbuilder.js"></script>
